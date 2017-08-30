@@ -1,4 +1,6 @@
 #Implementa una clase para resolver el problema de "Broken Calculator"
+import time
+
 
 from search import ( # Bases para construcción de problemas
     Problem, Node, Graph, UndirectedGraph,
@@ -7,24 +9,20 @@ from search import ( # Bases para construcción de problemas
 )
 
 from search import ( # Algoritmos de búsqueda no informada
-    tree_search, graph_search, best_first_graph_search,
-    breadth_first_tree_search, breadth_first_search,
-    depth_first_tree_search, depth_first_graph_search,
-    depth_limited_search, iterative_deepening_search,
-    uniform_cost_search,
-    compare_searchers
+    best_first_graph_search,breadth_first_search,depth_first_graph_search
 )
 
 from search import ( # Algoritmos de búsqueda informada (heurística)
-    greedy_best_first_graph_search, astar_search
+    recursive_best_first_search, astar_search
 )
 
-from random import randint
+
 MULTIPLICACION = 1 
 SUMA = 2
 RESTA = 3
 DIVISION = 4	 
 CONCATENACION = 5
+RESET = 6
 
 class BrokenCalculator(Problem):
 	def __init__(self,initial=0, values=[2,3],goal=20,acciones=['MUL']):
@@ -50,6 +48,8 @@ class BrokenCalculator(Problem):
 					acciones.append('DIV')
 				elif accion == 'CC':
 					acciones.append('CC')
+				elif accion == 'AC':
+					acciones.append('AC')
 		return acciones				
 
 	def result(self, estado, accion):		
@@ -75,6 +75,13 @@ class BrokenCalculator(Problem):
 			return nuevo_estado(estado,newvalue,DIVISION)
 		elif accion == 'CC':
 			return  nuevo_estado(estado,newvalue,CONCATENACION)
+		elif accion == 'AC':
+			return  nuevo_estado(estado,newvalue,RESET)
+			
+	def h(self, node):
+		hn = node.state
+		gl = self.goal
+		return abs(gl-hn)
 
 
 def nuevo_estado(estado,nuevovalor,operacion):
@@ -99,19 +106,37 @@ def nuevo_estado(estado,nuevovalor,operacion):
 		nuevoestado = float(str(estado)+str(nuevovalor))
 		#~ print(nuevoestado)
 		return nuevoestado
+	elif operacion == RESET:
+		nuevoestado = 0
+		#~ print(nuevoestado)
+		return nuevoestado
 
 def despliega_solucion(nodo_meta):
 	 actiones = nodo_meta.solution()
 	 nodos = nodo_meta.path()
-
+	 print("inicial: "+str(nodos[0].state))
 	 for na in range(len(actiones)):
-	 	print(actiones[na]+str(nodos[na].state))
+	 	print(actiones[na]+": "+str(nodos[na+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC']
-prob1 = BrokenCalculator(0,[2,3],19,['MUL','SUM','MINUS'])
-meta1 = breadth_first_search(prob1)
-if meta1:
-	despliega_solucion(meta1)
+prob1 = BrokenCalculator(0,[3],10002,['MUL','SUM','MINUS','DIV'])
+#---------------------------------------------------------------------------------------------------#
+#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------#
+ini = time.time()
+#~ meta1 = breadth_first_search(prob1)
+#~ if meta1:
+	#~ despliega_solucion(meta1)
+	#~ print("tiempo empleado metodo 1: "+str(time.time()-ini))
+#~ else:
+	#~ print("Falla")
+ini = time.time()	
+meta2 = astar_search(prob1)
+
+if meta2:
+	print("tiempo empleado metodo 2: "+str(time.time()-ini))
+	despliega_solucion(meta2)
 else:
 	print("Falla")
+	
 

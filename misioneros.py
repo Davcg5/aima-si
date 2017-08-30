@@ -34,12 +34,10 @@ class MisionerosYCanibales(Problem):
         Problem.__init__(self, inicial, meta)
         self.misycan = myc # No. de misioneros = No. de caníbales
         self.acciones = ['M1M','M2M','M1C','M2C','M1M1C'] # acciones posibles
-      
 
     def actions(self, estado):
         "Dependen de la distribución de misioneros y caníbales."
         accs = []
-        print("actions")
         for accion in self.acciones:
             if accion == 'M1M' and \
                not estado_ilegal(nuevo_estado(estado,1,0), self.misycan):
@@ -123,6 +121,12 @@ def despliega_solucion(nodo_meta):
 
 # Problema 1: (3,3,1) -> (0,0,0) para 3 misioneros y 3 caníbales
 prob1 = MisionerosYCanibales()
+# Problema 2: (2,2,0) -> (0,0,1) para 3 misioneros y 3 caníbales
+prob2 = MisionerosYCanibales((2,2,0),(0,0,1))
+# Problema 3: (4,4,1) -> (2,2,0) para 4 misioneros y 4 caníbales
+prob3 = MisionerosYCanibales((4,4,1),(2,2,0),4)
+# Problema 4: (6,5,1) -> (6,0,0) para 6 misioneros y 6 caníbales
+prob4 = MisionerosYCanibales((6,5,1),(6,0,0),6)
 
 # Resolviendo el problema 1:
 print("Solución del Problema 1 mediante búsqueda primero en anchura")
@@ -133,3 +137,26 @@ else:
     print("Falla: no se encontró una solución")
 
 # Resolviendo el problema 2:
+print("Solución del Problema 2 mediante búsqueda primero en anchura")
+meta2 = breadth_first_search(prob2)
+if meta2:
+    despliega_solucion(meta2)
+else:
+    print("Falla: no se encontró una solución")
+
+# Resolviendo el problema 3:
+print("Solución del Problema 3 mediante búsqueda primero en anchura")
+meta3 = breadth_first_search(prob3)
+if meta3:
+    despliega_solucion(meta3)
+else:
+    print("Falla: no se encontró una solución")
+
+# Resolviendo el problema 4:
+print("Solución del Problema 4 mediante búsqueda primero en anchura")
+meta4 = breadth_first_search(prob4)
+if meta4:
+    despliega_solucion(meta4)
+else:
+    print("Falla: no se encontró una solución")
+
