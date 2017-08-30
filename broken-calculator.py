@@ -77,25 +77,25 @@ class BrokenCalculator(Problem):
 			return  nuevo_estado(estado,newvalue,CONCATENACION)
 
 
-def nuevo_estado(estado,nuevovalor,operacion):
+def nuevo_estado(estado,nuevovalor,operation):
 	nuevoestado = 0
-	if operacion == MULTIPLICACION:
+	if operation == MULTIPLICACION:
 		nuevoestado = estado*nuevovalor
 		#~ print(nuevoestado)
 		return nuevoestado
-	elif operacion == SUMA:
+	elif operation == SUMA:
 		nuevoestado = estado+nuevovalor
 		#~ print(nuevoestado)
 		return nuevoestado
-	elif operacion == RESTA:
+	elif operation == RESTA:
 		nuevoestado = estado-nuevovalor
 		#~ print(nuevoestado)
 		return nuevoestado
-	elif operacion == DIVISION:
+	elif operation == DIVISION:
 		nuevoestado = estado/nuevovalor
 		#~ print(nuevoestado)
 		return nuevoestado
-	elif operacion == CONCATENACION:
+	elif operation == CONCATENACION:
 		nuevoestado = float(str(estado)+str(nuevovalor))
 		#~ print(nuevoestado)
 		return nuevoestado
