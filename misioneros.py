@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # Implementa una clase para resolver el problema de "Misioneros y Caníbales"
 # Incluye ejemplos de su uso para resolverlo mediante el algoritmo
 # de búsqueda primero en anchura
@@ -5,6 +8,7 @@
 # Autor: Dr. Santiago Enrique Conant Pablos
 # Fecha: 24 de agosto de 2016
 
+print("hola")
 from search import ( # Bases para construcción de problemas
     Problem, Node, Graph, UndirectedGraph,
     SimpleProblemSolvingAgentProgram,
@@ -159,4 +163,4 @@ if meta4:
     despliega_solucion(meta4)
 else:
     print("Falla: no se encontró una solución")
-
+#~ print("Nico es puto")
