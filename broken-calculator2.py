@@ -73,9 +73,15 @@ class BrokenCalculator(Problem):
 		elif action == 'AC':
 			return  get_new_state(state,new_value_state,RESET)
 			
-	#Heuristic		
+	#Heuristic1
 	def h(self, node):
-		return abs(self.goal-node.state)
+		print("Estado:",node.state)
+		h=abs(self.goal-node.state)
+		# print("heuristica",h)
+		return h
+	#Heuristic2
+	# def h(self, node):
+	# 	return abs(self.goal-node.state)
 
 
 def get_new_state(state,new_value,operation):
@@ -107,7 +113,7 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-prob1 = BrokenCalculator(0,[10,3],1001,['MUL','SUM','MINUS'])
+prob1 = BrokenCalculator(0,[2,10],1001,['MUL','SUM','MINUS','DIV'])
 #---------------------------------------------------------------------------------------------------#
 #-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
