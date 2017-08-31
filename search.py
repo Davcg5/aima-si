@@ -68,7 +68,11 @@ class Problem(object):
         is such that the path doesn't matter, this function will only look at
         state2.  If the path does matter, it will consider c and maybe state1
         and action. The default method costs 1 for every step in the path."""
-        return c + 1
+        # costo = self.goal/(c + abs(state1 - state2)+1)
+        costo = 2*abs(state1 - state2)
+        print("estado 1: %d %s estado 2: %d.Costo: %d"%(state1,action,state2,costo))
+        return costo
+        # return c + 1
 
     def value(self, state):
         """For optimization problems, each state has a value.  Hill-climbing
