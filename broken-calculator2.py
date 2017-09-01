@@ -78,7 +78,7 @@ class BrokenCalculator(Problem):
 		# print("Estado:",node.state)
 		# h=abs(self.goal-node.state)
 		# print("heuristica",h)
-		h=abs(self.goal/(1+node.state*node.state)**0.5-1)
+		h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
 		return h
 	#Heuristic2
 	# def h(self, node):
@@ -114,15 +114,16 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-actions = ['MUL','SUM','AC']
-numbers = [6,7,8,10]
+actions = ['MUL','AC','SUM','MINUS','DIV']
+numbers = [1002,102,147]
 for number in numbers:
-	prob1 = BrokenCalculator(0,[2,3],number,actions)
+	ini = time.time()
+	prob1 = BrokenCalculator(0,[2,3,10],number,actions)
 	initial_time = time.time()
 	goal2 = astar_search(prob1)
 
 	if goal2:
-		print("Number: ",number)
+		print("Number: ",number," time: ",time.time()-ini)
 		display_solution(goal2)
 		# print("Time to method 2 A*: "+str(time.time()-initial_time))
 	else:

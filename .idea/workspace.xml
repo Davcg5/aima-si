@@ -4,8 +4,6 @@
     <list default="true" id="a0813c05-86b4-4b01-85ed-63036fc16b92" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/broken-calculator2.py" afterPath="$PROJECT_DIR$/broken-calculator2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/search.py" afterPath="$PROJECT_DIR$/search.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.py" afterPath="$PROJECT_DIR$/utils.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,8 +17,8 @@
       <file leaf-file-name="broken-calculator2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/broken-calculator2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-574">
-              <caret line="78" column="29" lean-forward="false" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+            <state relative-caret-position="356">
+              <caret line="116" column="40" lean-forward="false" selection-start-line="116" selection-start-column="40" selection-end-line="116" selection-end-column="40" />
               <folding>
                 <element signature="e#198#357#0" expanded="true" />
               </folding>
@@ -31,8 +29,8 @@
       <file leaf-file-name="search.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="74" column="18" lean-forward="false" selection-start-line="74" selection-start-column="17" selection-end-line="74" selection-end-column="18" />
+            <state relative-caret-position="192">
+              <caret line="267" column="16" lean-forward="true" selection-start-line="267" selection-start-column="16" selection-end-line="267" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -56,6 +54,7 @@
       <find>10010</find>
       <find>1001.0</find>
       <find>print</find>
+      <find>estado</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -270,16 +269,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/search.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="74" column="18" lean-forward="false" selection-start-line="74" selection-start-column="17" selection-end-line="74" selection-end-column="18" />
+        <state relative-caret-position="192">
+          <caret line="267" column="16" lean-forward="true" selection-start-line="267" selection-start-column="16" selection-end-line="267" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/broken-calculator2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-574">
-          <caret line="78" column="29" lean-forward="false" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+        <state relative-caret-position="356">
+          <caret line="116" column="40" lean-forward="false" selection-start-line="116" selection-start-column="40" selection-end-line="116" selection-end-column="40" />
           <folding>
             <element signature="e#198#357#0" expanded="true" />
           </folding>
