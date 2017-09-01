@@ -71,7 +71,7 @@ class BrokenCalculator(Problem):
 			return  get_new_state(state,new_value_state,CONCATENATION)
 		elif action == 'AC':
 			return  get_new_state(state,new_value_state,RESET)
-			
+		
 	#Heuristic		
 	def h(self, node):
 		# No admissible
@@ -136,7 +136,6 @@ for number in goal_numbers:
 	ini = time.time()
 	prob2 = BrokenCalculator(0, initial_numbers, number, actions)
 	goal2 = breadth_first_search(prob2)
-
 	if goal2:
 		print("Number: ",number," time: ",time.time()-ini)
 		display_solution(goal2)
