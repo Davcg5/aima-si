@@ -1,4 +1,6 @@
-#Implementa una clase para resolver el problema de "Broken Calculator"
+#Implement a class to resolve the problem called "Broken Calculator".
+#Author: A01746886 Vazquez Nava Roberto Carlos 
+#		 A01746887 Villegas Felix Nicolas 
 
 from search import ( # Bases para construcción de problemas
     Problem, Node, Graph, UndirectedGraph,
@@ -7,111 +9,135 @@ from search import ( # Bases para construcción de problemas
 )
 
 from search import ( # Algoritmos de búsqueda no informada
-    tree_search, graph_search, best_first_graph_search,
-    breadth_first_tree_search, breadth_first_search,
-    depth_first_tree_search, depth_first_graph_search,
-    depth_limited_search, iterative_deepening_search,
-    uniform_cost_search,
-    compare_searchers
+    best_first_graph_search,breadth_first_search,depth_first_graph_search
 )
 
 from search import ( # Algoritmos de búsqueda informada (heurística)
-    greedy_best_first_graph_search, astar_search
+    recursive_best_first_search, astar_search
 )
 
-from random import randint
-MULTIPLICACION = 1 
-SUMA = 2
-RESTA = 3
+import time
+import math
+
+#Define CONSTANTS
+MULTIPLICATION = 1 
+SUM = 2
+SUBTRACTION = 3
 DIVISION = 4	 
-CONCATENACION = 5
+CONCATENATION = 5
+RESET = 6
 
 class BrokenCalculator(Problem):
-	def __init__(self,initial=0, values=[2,3],goal=20,acciones=['MUL']):
+	def __init__(self,initial=0, values=[2,3],goal=20,array_actions=['MUL']):
 			Problem.__init__(self,initial,goal)
-			#~ self.level = level  #Level for the exercise}
-			self.actualValue = 0
-			self.valuesusing = values
-			self.count = len(self.valuesusing)
-			self.acciones = acciones
-			#~ self.acciones = ['MUL','SUM','MINUS','DIV','CC']
+			self.using_values = values
+			self.count = len(self.using_values)
+			self.array_actions = array_actions
 
 	def actions(self,state):
-		acciones = []
-		for i in self.valuesusing:
-			for accion in self.acciones:
-				if accion == 'MUL':
-					acciones.append('MUL')
-				elif accion == 'SUM':
-					acciones.append('SUM')
-				elif accion == 'MINUS':
-					acciones.append('MINUS')
-				elif accion == 'DIV':
-					acciones.append('DIV')
-				elif accion == 'CC':
-					acciones.append('CC')
-		return acciones				
+		actions_return = []
+		for i in self.using_values:
+			for action in self.array_actions:
+				if action == 'MUL':
+					actions_return.append('MUL')
+				elif action == 'SUM':
+					actions_return.append('SUM')
+				elif action == 'MINUS':
+					actions_return.append('MINUS')
+				elif action == 'DIV':
+					actions_return.append('DIV')
+				elif action == 'CC':
+					actions_return.append('CC')
+				elif action == 'AC':
+					actions_return.append('AC')
+		return actions_return				
 
-	def result(self, estado, accion):		
-		"El resultado se calcula sumando el estado anterior con el nuevo estado."
-		#~ newvalue = randint(2,3)
-		newvalue = self.valuesusing[self.count-1]
-		if accion == self.acciones[len(self.acciones)-1]:	
+	def result(self, state, action):		
+		"The result is calculated by adding the previous state to the new state."
+		new_value_state = self.using_values[self.count-1]
+		if action == self.array_actions[len(self.array_actions)-1]:	
 			self.count -= 1
 			if self.count == 0:
-				self.count = len(self.valuesusing)
-			
-		if accion == 'MUL':
-			#~ print(accion+str(newvalue))
-			return nuevo_estado(estado,newvalue,MULTIPLICACION)   
-		elif accion == 'SUM':
-			#~ print(accion+str(newvalue))
-			return nuevo_estado(estado,newvalue,SUMA)  #donde 2 es sumar
-		elif accion== 'MINUS':
-			#~ print(accion+str(newvalue))
-			return nuevo_estado(estado,newvalue,RESTA)  
-		elif accion == 'DIV':
-			#~ print(accion+str(newvalue))
-			return nuevo_estado(estado,newvalue,DIVISION)
-		elif accion == 'CC':
-			return  nuevo_estado(estado,newvalue,CONCATENACION)
+				self.count = len(self.using_values)			
+		if action == 'MUL':
+			return get_new_state(state,new_value_state,MULTIPLICATION)   
+		elif action == 'SUM':
+			return get_new_state(state,new_value_state,SUM) 
+		elif action== 'MINUS':
+			return get_new_state(state,new_value_state,SUBTRACTION)  
+		elif action == 'DIV':
+			return get_new_state(state,new_value_state,DIVISION)
+		elif action == 'CC':
+			return  get_new_state(state,new_value_state,CONCATENATION)
+		elif action == 'AC':
+			return  get_new_state(state,new_value_state,RESET)
+		
+	#Heuristic		
+	def h(self, node):
+		# No admissible
+		# h=abs((2 ** 0.5)/2-node.state/((self.goal ** 2+node.state**2))**0.5)
+		# h = abs(self.goal - math.exp(node.state / 60))
 
 
-def nuevo_estado(estado,nuevovalor,operation):
-	nuevoestado = 0
-	if operation == MULTIPLICACION:
-		nuevoestado = estado*nuevovalor
-		#~ print(nuevoestado)
-		return nuevoestado
-	elif operation == SUMA:
-		nuevoestado = estado+nuevovalor
-		#~ print(nuevoestado)
-		return nuevoestado
-	elif operation == RESTA:
-		nuevoestado = estado-nuevovalor
-		#~ print(nuevoestado)
-		return nuevoestado
+		# Admissible
+		# h=abs(self.goal/((1+node.state*node.state)**0.5)-(node.state/(abs(node.state)+1)))
+		h= abs(math.exp(-((node.state-self.goal)**2)/ 80)-1)
+		return h
+
+
+def get_new_state(state,new_value,operation):
+	new_state = 0
+	if operation == MULTIPLICATION:
+		new_state = state*new_value
+		return new_state
+	elif operation == SUM:
+		new_state = state+new_value
+		return new_state
+	elif operation == SUBTRACTION:
+		new_state = state-new_value
+		return new_state
 	elif operation == DIVISION:
-		nuevoestado = estado/nuevovalor
-		#~ print(nuevoestado)
-		return nuevoestado
-	elif operation == CONCATENACION:
-		nuevoestado = float(str(estado)+str(nuevovalor))
-		#~ print(nuevoestado)
-		return nuevoestado
+		new_state = state/new_value
+		return new_state
+	elif operation == CONCATENATION:
+		new_state = float(str(state)+str(new_value))
+		return new_state
+	elif operation == RESET:
+		new_state = 0
+		return new_state
 
-def despliega_solucion(nodo_meta):
-	 actiones = nodo_meta.solution()
-	 nodos = nodo_meta.path()
+def display_solution(goal_node):
+	 actions_solution = goal_node.solution()
+	 nodes = goal_node.path()
+	 print("Initial: "+str(nodes[0].state))
+	 for i in range(len(actions_solution)):
+	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
-	 for na in range(len(actiones)):
-	 	print(actiones[na]+str(nodos[na].state))
+#['MUL','SUM','MINUS','DIV','CC','AC']
+#---------------------------------------------------------------------------------------------------#
+#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------#
+print("---------------A* method-------------")
+actions = ['MUL','SUM','DIV']
+initial_numbers = [2,3,10]
+goal_numbers= [123,147,102]
+for number in goal_numbers:
+	prob1 = BrokenCalculator(0,initial_numbers,number,actions)
+	ini = time.time()
+	goal1 = astar_search(prob1)
 
-#['MUL','SUM','MINUS','DIV','CC']
-prob1 = BrokenCalculator(0,[2,3],19,['MUL','SUM','MINUS'])
-meta1 = breadth_first_search(prob1)
-if meta1:
-	despliega_solucion(meta1)
-else:
-	print("Falla")
-
+	if goal1:
+		print("Number: ",number," time: ",time.time()-ini)
+		display_solution(goal1)
+	else:
+		print("Fail")
+print("---------------Breadth First-------------")
+for number in goal_numbers:
+	ini = time.time()
+	prob2 = BrokenCalculator(0, initial_numbers, number, actions)
+	goal2 = breadth_first_search(prob2)
+	if goal2:
+		print("Number: ",number," time: ",time.time()-ini)
+		display_solution(goal2)
+	else:
+		print("Fail")
