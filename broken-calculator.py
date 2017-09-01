@@ -17,6 +17,7 @@ from search import ( # Algoritmos de búsqueda informada (heurística)
 )
 
 import time
+import math
 
 #Define CONSTANTS
 MULTIPLICATION = 1 
@@ -79,7 +80,8 @@ class BrokenCalculator(Problem):
 
 
 		# Admissible
-		h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
+		# h=abs(self.goal/((1+node.state*node.state)**0.5)-(node.state/(abs(node.state)+1)))
+		h= abs(math.exp(-((node.state-self.goal)**2)/ 80)-1)
 		return h
 
 
@@ -118,7 +120,7 @@ def display_solution(goal_node):
 print("---------------A* method-------------")
 actions = ['MUL','SUM','DIV']
 initial_numbers = [2,3,10]
-goal_numbers= [102,147,1234]
+goal_numbers= [123,147,102]
 for number in goal_numbers:
 	prob1 = BrokenCalculator(0,initial_numbers,number,actions)
 	ini = time.time()
