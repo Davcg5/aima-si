@@ -73,7 +73,14 @@ class BrokenCalculator(Problem):
 			
 	#Heuristic		
 	def h(self, node):
-		return abs(self.goal-node.state)
+		# No admissible
+		# h=abs((2 ** 0.5)/2-node.state/((self.goal ** 2+node.state**2))**0.5)
+		# h = abs(self.goal - math.exp(node.state / 60))
+
+
+		# Admissible
+		h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
+		return h
 
 
 def get_new_state(state,new_value,operation):
@@ -105,43 +112,31 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-prob1 = BrokenCalculator(0,[3,9,10],60,['MUL','SUM','MINUS','DIV'])
 #---------------------------------------------------------------------------------------------------#
 #-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
-initial_time = time.time()
-goal1 = breadth_first_search(prob1)
-if goal1:
-	display_solution(goal1)
-	print("Time to method 1 Breadth First: "+str(time.time()-initial_time))
-else:
-	print("Fail")
-initial_time = time.time()	
-goal2 = astar_search(prob1)
+print("---------------A* method-------------")
+actions = ['MUL','SUM','DIV']
+initial_numbers = [2,3,10]
+goal_numbers= [102,147,1234]
+for number in goal_numbers:
+	prob1 = BrokenCalculator(0,initial_numbers,number,actions)
+	ini = time.time()
+	goal1 = astar_search(prob1)
 
-if goal2:
-	display_solution(goal2)
-	print("Time to method 2 A*: "+str(time.time()-initial_time))
-else:
-	print("Fail")
-	
-prob2 = BrokenCalculator(5,[2,4,7],100,['MUL','SUM','MINUS','AC'])
-#---------------------------------------------------------------------------------------------------#
-#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
-#---------------------------------------------------------------------------------------------------#
-initial_time = time.time()
-goal3 = breadth_first_search(prob2)
-if goal3:
-	display_solution(goal3)
-	print("Time to method 1 Breadth First: "+str(time.time()-initial_time))
-else:
-	print("Fail")
-initial_time = time.time()	
-goal4 = astar_search(prob2)
+	if goal1:
+		print("Number: ",number," time: ",time.time()-ini)
+		display_solution(goal1)
+	else:
+		print("Fail")
+print("---------------Breadth First-------------")
+for number in goal_numbers:
+	ini = time.time()
+	prob2 = BrokenCalculator(0, initial_numbers, number, actions)
+	goal2 = breadth_first_search(prob2)
 
-if goal4:
-	display_solution(goal4)
-	print("Time to method 2 A*: "+str(time.time()-initial_time))
-else:
-	print("Fail")
-	
+	if goal2:
+		print("Number: ",number," time: ",time.time()-ini)
+		display_solution(goal2)
+	else:
+		print("Fail")
