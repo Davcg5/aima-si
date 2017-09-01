@@ -264,7 +264,7 @@ def best_first_graph_search(problem, f):
     explored = set()
     while frontier:
         node = frontier.pop()
-        print(node)
+        # print(node)
         if problem.goal_test(node.state):
             return node
         explored.add(node.state)

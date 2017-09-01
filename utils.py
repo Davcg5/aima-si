@@ -273,7 +273,7 @@ def memoize(fn, slot=None):
             else:
                 val = fn(obj, *args)
                 setattr(obj, slot, val)
-                print(val)
+                # print(val)
                 return val
     else:
         def memoized_fn(*args):

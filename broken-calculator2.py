@@ -75,7 +75,7 @@ class BrokenCalculator(Problem):
 			
 	#Heuristic1
 	def h(self, node):
-		print("Estado:",node.state)
+		# print("Estado:",node.state)
 		# h=abs(self.goal-node.state)
 		# print("heuristica",h)
 		h=abs(self.goal/(1+node.state*node.state)**0.5-1)
@@ -114,27 +114,23 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-prob1 = BrokenCalculator(0,[2,10],1001,['MUL','SUM','DIV'])
-#---------------------------------------------------------------------------------------------------#
-#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
-#---------------------------------------------------------------------------------------------------#
-initial_time = time.time()
-#~ goal1 = breadth_first_search(prob1)
-#~ if goal1:
-	#~ display_solution(goal1)
-	#~ print("Time to method 1 Breadth First: "+str(time.time()-initial_time))
-#~ else:
-	#~ print("Fail")
-#~ initial_time = time.time()	
-goal2 = astar_search(prob1)
+actions = ['MUL','SUM','AC']
+numbers = [6,7,8,10]
+i = 1
+for number in numbers:
+	prob1 = BrokenCalculator(0,[2,3],number,actions)
+	initial_time = time.time()
+	goal2 = astar_search(prob1)
 
-if goal2:
-	display_solution(goal2)
-	print("Time to method 2 A*: "+str(time.time()-initial_time))
-else:
-	print("Fail")
+	if goal2:
+		print("Number: ",number)
+		display_solution(goal2)
+		# print("Time to method 2 A*: "+str(time.time()-initial_time))
+	else:
+		print("Fail")
+	i += 1
 	
-prob2 = BrokenCalculator(5,[2,4,7],100,['MUL','SUM','MINUS','AC'])
+# prob2 = BrokenCalculator(5,[2,4,7],100,['MUL','SUM','MINUS','AC'])
 #---------------------------------------------------------------------------------------------------#
 #-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
