@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
 #Implement a class to resolve the problem called "Broken Calculator".
 #Author: A01746886 Vazquez Nava Roberto Carlos 
 #		 A01746887 Villegas Felix Nicolas 
@@ -72,17 +74,19 @@ class BrokenCalculator(Problem):
 		elif action == 'AC':
 			return  get_new_state(state,new_value_state,RESET)
 			
-	#Heuristic		
+	#Heuristic1
 	def h(self, node):
-		# No admissible
+		# print("Estado:",node.state)
+		#No admisible
 		# h=abs((2 ** 0.5)/2-node.state/((self.goal ** 2+node.state**2))**0.5)
-		# h = abs(self.goal - math.exp(node.state / 60))
-
-
-		# Admissible
-		# h=abs(self.goal/((1+node.state*node.state)**0.5)-(node.state/(abs(node.state)+1)))
-		h= abs(math.exp(-((node.state-self.goal)**2)/ 80)-1)
+		h=abs(self.goal - math.exp(node.state/60))
+		# print("heuristica",h)
+		#Admissible
+		# h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
 		return h
+	#Heuristic2
+	# def h(self, node):
+	# 	return abs(self.goal-node.state)
 
 
 def get_new_state(state,new_value,operation):
@@ -114,28 +118,24 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-#---------------------------------------------------------------------------------------------------#
-#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
-#---------------------------------------------------------------------------------------------------#
 print("---------------A* method-------------")
 actions = ['MUL','SUM','DIV']
-initial_numbers = [2,3,10]
-goal_numbers= [123,147,102]
-for number in goal_numbers:
-	prob1 = BrokenCalculator(0,initial_numbers,number,actions)
+numbers = [102,147,1234]
+for number in numbers:
 	ini = time.time()
-	goal1 = astar_search(prob1)
+	prob1 = BrokenCalculator(0,[2,3,10],number,actions)
+	goal2 = astar_search(prob1)
 
-	if goal1:
+	if goal2:
 		print("Number: ",number," time: ",time.time()-ini)
-		display_solution(goal1)
+		display_solution(goal2)
 	else:
 		print("Fail")
 print("---------------Breadth First-------------")
-for number in goal_numbers:
+for number in numbers:
 	ini = time.time()
-	prob2 = BrokenCalculator(0, initial_numbers, number, actions)
-	goal2 = breadth_first_search(prob2)
+	prob1 = BrokenCalculator(0,[2,3,10],number,actions)
+	goal2 = breadth_first_search(prob1)
 
 	if goal2:
 		print("Number: ",number," time: ",time.time()-ini)
