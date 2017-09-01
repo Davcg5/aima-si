@@ -116,7 +116,6 @@ def display_solution(goal_node):
 #['MUL','SUM','MINUS','DIV','CC','AC']
 actions = ['MUL','SUM','AC']
 numbers = [6,7,8,10]
-i = 1
 for number in numbers:
 	prob1 = BrokenCalculator(0,[2,3],number,actions)
 	initial_time = time.time()
@@ -128,7 +127,6 @@ for number in numbers:
 		# print("Time to method 2 A*: "+str(time.time()-initial_time))
 	else:
 		print("Fail")
-	i += 1
 	
 # prob2 = BrokenCalculator(5,[2,4,7],100,['MUL','SUM','MINUS','AC'])
 #---------------------------------------------------------------------------------------------------#
