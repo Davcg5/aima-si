@@ -76,9 +76,10 @@ class BrokenCalculator(Problem):
 	#Heuristic1
 	def h(self, node):
 		# print("Estado:",node.state)
-		# h=abs(self.goal-node.state)
+		# h=abs(1-node.state*node.state/self.goal)
+		h=abs(1-abs(node.state)/self.goal)
 		# print("heuristica",h)
-		h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
+		# h=abs(self.goal/(1+node.state*node.state)**0.5-node.state/(abs(node.state)+1))
 		return h
 	#Heuristic2
 	# def h(self, node):
@@ -114,38 +115,27 @@ def display_solution(goal_node):
 	 	print(actions_solution[i]+": "+str(nodes[i+1].state))
 
 #['MUL','SUM','MINUS','DIV','CC','AC']
-actions = ['MUL','AC','SUM','MINUS','DIV']
-numbers = [1002,102,147]
+print("---------------A* method-------------")
+actions = ['MUL','SUM','DIV']
+numbers = [102,147,123]
 for number in numbers:
 	ini = time.time()
 	prob1 = BrokenCalculator(0,[2,3,10],number,actions)
-	initial_time = time.time()
 	goal2 = astar_search(prob1)
 
 	if goal2:
 		print("Number: ",number," time: ",time.time()-ini)
 		display_solution(goal2)
-		# print("Time to method 2 A*: "+str(time.time()-initial_time))
 	else:
 		print("Fail")
-	
-# prob2 = BrokenCalculator(5,[2,4,7],100,['MUL','SUM','MINUS','AC'])
-#---------------------------------------------------------------------------------------------------#
-#-----------------------SOLUCION PROBLEMA-----------------------------------------------------------#
-#---------------------------------------------------------------------------------------------------#
-#~ initial_time = time.time()
-#~ goal3 = breadth_first_search(prob2)
-#~ if goal3:
-	#~ display_solution(goal3)
-	#~ print("Time to method 1 Breadth First: "+str(time.time()-initial_time))
-#~ else:
-	#~ print("Fail")
-#~ initial_time = time.time()	
-#~ goal4 = astar_search(prob2)
+print("---------------Breadth First-------------")
+for number in numbers:
+	ini = time.time()
+	prob1 = BrokenCalculator(0,[2,3,10],number,actions)
+	goal2 = breadth_first_search(prob1)
 
-#~ if goal4:
-	#~ display_solution(goal4)
-	#~ print("Time to method 2 A*: "+str(time.time()-initial_time))
-#~ else:
-	#~ print("Fail")
-	
+	if goal2:
+		print("Number: ",number," time: ",time.time()-ini)
+		display_solution(goal2)
+	else:
+		print("Fail")

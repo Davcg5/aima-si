@@ -69,7 +69,7 @@ class Problem(object):
         state2.  If the path does matter, it will consider c and maybe state1
         and action. The default method costs 1 for every step in the path."""
         # costo = self.goal/(c + abs(state1 - state2)+1)
-        # costo = c+abs(state1 - state2)/10007
+        # costo = c+abs(state1 - state2)
         costo = c+1
         # costo = 2*abs(state1 - state2)
         # print("estado 1: %d %s estado 2: %d Costo: %d"%(state1,action,state2,c))
