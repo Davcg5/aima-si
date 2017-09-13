@@ -121,19 +121,53 @@ class BlobsBoard(object):
                 self.green_blobs = aux_blobs    
         elif direction == 'U':
             print("Moves Up")
+            tuple_to_add = (0,-1)
             if color == 'R':   
                 print("moves Red")
+                for blob in self.red_blobs:
+                    print("Old tuple")
+                    print(blob)
+                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))
+                    print("New tuple")
+                    print(new_tuple)
+                    aux_blobs.add(new_tuple)
+                self.red_blobs = aux_blobs
             else:
                 print("MOVES Green")
+                for blob in self.green_blobs:
+                    print("OLD TUPLE")
+                    print(blob)
+                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))
+                    print("New tuple")
+                    print(new_tuple)
+                    aux_blobs.add(new_tuple)
+                self.green_blobs = aux_blobs
         else:
+            tuple_to_add = (0,1)
             print("Moves Down")
             if color == 'R':   
-                #for blob in 
                 print("moves Red")
+                for blob in self.red_blobs:
+                    print("old tuple")
+                    print(blob)
+                    new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
+                    print("NEW tuple")
+                    print(new_tuple)
+                    aux_blobs.add(new_tuple)
+                self.red_blobs = aux_blobs   
             else:
                 print("MOVES Green")
+                for blob in self.green_blobs:
+                    print("Old Tuple")
+                    print(blob)
+                    new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
+                    print("NEW tuple")
+                    print(new_tuple)
+                    aux_blobs.add(new_tuple)
+                self.green_blobs = aux_blobs
+
         #
-        #tuple_r = (0,1)
+        
         #for blob in state.board.green_blobs:
             
         #    if new_tuple[0]<=6 and new_tuple[1]<=6:
@@ -160,7 +194,7 @@ class Blobs(Game):
     board position."""
 
     def __init__(self):
-        self.initial = GameState(to_move='R', utility=0,
+        self.initial = GameState(to_move='G', utility=0,
                                  board=BlobsBoard(), moves=['L','R','U','D'])
 
     def actions(self, state):
@@ -175,11 +209,11 @@ class Blobs(Game):
         print(state.to_move)
         if state.to_move == "R":
             legal_movements.append('R')
-            self.result(state,'L')
+            self.result(state,'D')
         #MOVE GREEN  
         elif state.to_move == "G":
             legal_movements.append('R')
-            self.result(state,'L')
+            self.result(state,'D')
             #self.result(state,"L")
             #return  
         #elif state.to_move == "U":
@@ -202,8 +236,12 @@ class Blobs(Game):
         elif move == 'L':
             print("Move L")
             self.initial.board.move(self.initial.to_move, "L")
+        elif move == 'U':
+            print("Move U")
+            self.initial.board.move(self.initial.to_move,"U")
         else:
-            print("Result not valid")
+            print("MOVE D")
+            self.initial.board.move(self.initial.to_move,"D")
         #print(state.board.red_blobs)
         return state
 
