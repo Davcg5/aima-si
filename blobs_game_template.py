@@ -77,8 +77,8 @@ class BlobsBoard(object):
                     print("Old Tuple")
                     print(blob)   
                     new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))
-                    #Aqui debe pregunta si la nueva tupla existen en GREEN blobs entonces la eliminas de GREEN
-                    #ver si no se sale del rango
+                    #Aqui debe pregunta si la nueva tupla existen en GREEN blobs entonces la eliminas de GREEN listo
+                    #ver si no se sale del rango LISTO
                     if self.is_inside_border(new_tuple):
                         print("Is a valid tuple")
                     else:
@@ -103,6 +103,10 @@ class BlobsBoard(object):
                         print("Is an invalid tuple")
                     #Aqui debe pregunta si la nueva tupla existen en red blobs entonces la eliminas de RED
                     #ver si no se sale del rango 
+                    if self.exist_tuple(new_tuple,self.red_blobs):
+                        print("The new tuple exist in the red blobs")
+                        #So  we need to eliminate from red blobs the repeated tuple
+                        print(self.red_blobs)
                     print("New Tuple")
                     print(new_tuple)   
                     aux_blobs.add(new_tuple)
@@ -120,6 +124,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.green_blobs):
+                        print("The new tuple exist in the green blobs")
+                        #So  we need to eliminate from green blobs the repeated tuple
+                        print(self.green_blobs)
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -134,6 +142,12 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+
+                    if self.exist_tuple(new_tuple,self.red_blobs):
+                        print("The new tuple exist in the red blobs")
+                        #So  we need to eliminate from red blobs the repeated tuple
+                        print(self.red_blobs)
+
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -151,6 +165,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.green_blobs):
+                        print("The new tuple exist in the green blobs")
+                        #So  we need to eliminate from green blobs the repeated tuple
+                        print(self.green_blobs)
                     print("New tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -165,6 +183,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.red_blobs):
+                        print("The new tuple exist in the red blobs")
+                        #So  we need to eliminate from red blobs the repeated tuple
+                        print(self.red_blobs)
                     print("New tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -182,6 +204,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.green_blobs):
+                        print("The new tuple exist in the green blobs")
+                        #So  we need to eliminate from green blobs the repeated tuple
+                        print(self.green_blobs)
                     print("NEW tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -196,6 +222,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.red_blobs):
+                        print("The new tuple exist in the red blobs")
+                        #So  we need to eliminate from red blobs the repeated tuple
+                        print(self.red_blobs)
                     print("NEW tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
