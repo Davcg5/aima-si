@@ -55,7 +55,6 @@ class BlobsBoard(object):
                else: blobs.append('.')
             #print(blobs)
         print(self.red_blobs)
-                
 
     def update_borders(self):
         "update the positions of the board borders"
@@ -80,6 +79,10 @@ class BlobsBoard(object):
                     new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))
                     #Aqui debe pregunta si la nueva tupla existen en GREEN blobs entonces la eliminas de GREEN
                     #ver si no se sale del rango
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -90,6 +93,10 @@ class BlobsBoard(object):
                     print("Old Tuple")
                     print(blob)   
                     new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     #Aqui debe pregunta si la nueva tupla existen en red blobs entonces la eliminas de RED
                     #ver si no se sale del rango 
                     print("New Tuple")
@@ -104,7 +111,11 @@ class BlobsBoard(object):
                 for blob in self.red_blobs:
                     print("Old Tuple") 
                     print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y,blob, tuple_to_add))
+                    new_tuple = tuple(map(lambda x,y: x + y,blob, tuple_to_add))             
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -115,6 +126,10 @@ class BlobsBoard(object):
                     print("Old tuple")
                     print(blob)
                     new_tuple = tuple(map(lambda x,y: x + y, blob,tuple_to_add))
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -127,7 +142,11 @@ class BlobsBoard(object):
                 for blob in self.red_blobs:
                     print("Old tuple")
                     print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))
+                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))             
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("New tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -138,6 +157,10 @@ class BlobsBoard(object):
                     print("OLD TUPLE")
                     print(blob)
                     new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("New tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -151,6 +174,10 @@ class BlobsBoard(object):
                     print("old tuple")
                     print(blob)
                     new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("NEW tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -161,6 +188,10 @@ class BlobsBoard(object):
                     print("Old Tuple")
                     print(blob)
                     new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
+                    if self.is_inside_border(new_tuple):
+                        print("Is a valid tuple")
+                    else:
+                        print("Is an invalid tuple")
                     print("NEW tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -168,8 +199,7 @@ class BlobsBoard(object):
 
         #
         
-        #for blob in state.board.green_blobs:
-            
+        #for blob in state.board.green_blobs:           
         #    if new_tuple[0]<=6 and new_tuple[1]<=6:
         #       
         #state.board.green_blobs = aux_blobs
@@ -182,7 +212,18 @@ class BlobsBoard(object):
         #raise NotImplementedError
 
     # other methods???
-        
+    #The function define if the tuple is in a border of the board
+    def is_inside_border(self, tuple):
+         x_by_tuple = tuple[0]
+         y_by_tuple = tuple[1]
+         if (x_by_tuple > self.left_border and x_by_tuple < self.right_border) and (y_by_tuple > self.top_border and y_by_tuple < self.bottom_border):
+            #Is inside border
+            return True 
+         else:
+            return False   
+    #The function define is a tuple exist in an other list of tuples        
+    #def exist_tuple(self,tuple,list_tuples):
+
 class Blobs(Game):
     """Play Blobs on an 6 x 6 board, with Max (first player) playing the red
     Blobs with marker 'R'.
@@ -194,7 +235,7 @@ class Blobs(Game):
     board position."""
 
     def __init__(self):
-        self.initial = GameState(to_move='G', utility=0,
+        self.initial = GameState(to_move='R', utility=0,
                                  board=BlobsBoard(), moves=['L','R','U','D'])
 
     def actions(self, state):
@@ -209,11 +250,11 @@ class Blobs(Game):
         print(state.to_move)
         if state.to_move == "R":
             legal_movements.append('R')
-            self.result(state,'D')
+            self.result(state,'R')
         #MOVE GREEN  
         elif state.to_move == "G":
             legal_movements.append('R')
-            self.result(state,'D')
+            self.result(state,'R')
             #self.result(state,"L")
             #return  
         #elif state.to_move == "U":
