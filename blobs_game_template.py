@@ -83,6 +83,10 @@ class BlobsBoard(object):
                         print("Is a valid tuple")
                     else:
                         print("Is an invalid tuple")
+                    if self.exist_tuple(new_tuple,self.green_blobs):
+                        print("The new tuple exist in the green blobs")
+                        #So  we need to eliminate from green blobs the repeated tuple
+                        print(self.green_blobs)
                     print("New Tuple")
                     print(new_tuple)
                     aux_blobs.add(new_tuple)
@@ -221,8 +225,19 @@ class BlobsBoard(object):
             return True 
          else:
             return False   
+
     #The function define is a tuple exist in an other list of tuples        
-    #def exist_tuple(self,tuple,list_tuples):
+    def exist_tuple(self,tuple,list_tuples):
+        exist = False
+        for blob in list_tuples:
+            if ((blob[0] == tuple[0]) and (blob[1] == tuple[1])):
+                #Is the same tuple
+                return True
+        #The tuple do not exist in the list of tuples
+        return False
+
+
+
 
 class Blobs(Game):
     """Play Blobs on an 6 x 6 board, with Max (first player) playing the red
@@ -245,6 +260,7 @@ class Blobs(Game):
         #Segun yo el to move es el color que va a mover no la accion
             #deberia de retornar las acciones validas segun el color
         #MOVE RED
+
         print("Action in BLOB")
         print("State to move")
         print(state.to_move)
