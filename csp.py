@@ -2,7 +2,7 @@
 
 from utils import argmin_random_tie, count, first
 import search
-
+import time
 from collections import defaultdict
 from functools import reduce
 
@@ -604,6 +604,8 @@ def Zebra():
                 Norwegian: Blue; Winston: Snails; LuckyStrike: OJ;
                 Ukranian: Tea; Japanese: Parliaments; Kools: Horse;
                 Coffee: Green; Green: Ivory""", variables)
+    print(domains)
+    print(neighbors)
     for type in [Colors, Pets, Drinks, Countries, Smokes]:
         for A in type:
             for B in type:
@@ -612,7 +614,8 @@ def Zebra():
                         neighbors[A].append(B)
                     if A not in neighbors[B]:
                         neighbors[B].append(A)
-
+    print(neighbors)
+    time.sleep(10)
     def zebra_constraint(A, a, B, b, recurse=0):
         same = (a == b)
         next_to = abs(a - b) == 1
