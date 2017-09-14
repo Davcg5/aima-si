@@ -21,14 +21,18 @@ class BlobsBoard(object):
         self.red_blobs = None
         self.green_blobs = None
         self.new_random_board()
-        print("init BlobsBoard")
+        #print("init BlobsBoard")
 
     def new_random_board(self):
         "generate 12 random positions for each Blob color on the board"
         positions = [(row,col) for row in range(1, 7) for col in range(1, 7)]
         random.shuffle(positions)
-        self.red_blobs = set(positions[0:12])
-        self.green_blobs = set(positions[12:24])
+        self.red_blobs = set(positions[0:6])
+        self.green_blobs = set(positions[6:12])
+        print("ROJAS INICIALES")
+        print(self.red_blobs)
+        print("VERDES INICIALES")
+        print(self.green_blobs)
     
     #def display(self):
     ##    print("displays the board")
@@ -54,63 +58,119 @@ class BlobsBoard(object):
                elif position in self.green_blobs: blobs.append('X') #green
                else: blobs.append('.')
             #print(blobs)
-        print(self.red_blobs)
+        #print(self.red_blobs)
 
     def update_borders(self):
         "update the positions of the board borders"
         # update left border: moves right on left empty columns
+        #Checar que no haya ningun elemento en x con valor x de left border-1
+        #Si para ningun elemento en x =  0+1(LeftBorder + 1)  
+
+        #for each 
+        #print("UPDAT BORDERS")
+        union_blob = self.red_blobs.union(self.green_blobs)
+        longitud_rojas = len(self.red_blobs)
+        longitud_verdes = len(self.green_blobs)
+        #print("ROJAS")
+        #print(self.red_blobs)
+        #print("VERDES")
+        #print(self.green_blobs)
+        #print("Longitud rojas")
+        #print(longitud_rojas)
+        #print("Longitud Verdes")
+        #print(longitud_verdes)
+        #print(union_blob)
+        #print("LIMITES, IZQUIERDO, DERECHO, TOP, BOTTOM")
+        #print(self.left_border)
+        #print(self.right_border)
+        #print(self.top_border)
+        #print(self.bottom_border)
+        tuples_left_border = 0
+        tuples_right_border = 0
+        tuples_top_border = 0
+        tuples_bottom_border = 0
+        for blob in union_blob:
+            #print("Tupla a Analizar")
+           # print(blob)
+            x_by_tuple = blob[0]
+            y_by_tuple = blob[1]
+
+            #print("X:" + str(x_by_tuple))
+            #print("Y:" + str(y_by_tuple))
+            if x_by_tuple == self.left_border+1:
+                tuples_left_border+=1
+            elif x_by_tuple == self.right_border-1:
+                tuples_right_border+=1
+            elif y_by_tuple == self.top_border+1:
+                tuples_top_border+=1
+            else:
+                if y_by_tuple == self.bottom_border-1:
+                    tuples_bottom_border+=1
+
+        #print("Total Tuplas")
+        #print("TUPLAS EN BORDE IZQUIERDO")
+        #print(tuples_left_border)
+        #print("TUPLAS EN BORDE DERECHO")
+        #print(tuples_right_border)
+        #print("TUPLAS EN BORDE SUPERIOR")
+        #print(tuples_top_border)
+        #print("TUPLAS EN BORDE INFERIOR")
+        #print(tuples_bottom_border)
+
         # update right border: moves left on right empty columns
+
+        #Checar que no haya ningun elemento en x con valor de x = right border
+
         # update top border: moves down on top empty rows
+
+        #Checar que no haya ningun elemento 
         # update bottom border: moves up on bottom empty rows
-        raise NotImplementedError
-    
+        #raise NotImplementedError
+ 
     def move(self, color, direction):
-        print("move in game")
-        #"moves all the blobs of a color in a direction"\
+        "moves all the blobs of a color in a direction"
         aux_blobs=set()      
         if direction == 'R':
             tuple_to_add = (1,0)
-            print("Moves Rigth")
-            if color == 'R': 
-                print("moves Red")   
-                for blob in self.red_blobs:
-                    print("Old Tuple")
-                    print(blob)   
-                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))
-                    #Aqui debe pregunta si la nueva tupla existen en GREEN blobs entonces la eliminas de GREEN listo
-                    #ver si no se sale del rango LISTO
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
+            if color == 'R':   
+                for blob in self.red_blobs:  
+                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))              
+                    if not (self.is_inside_border(new_tuple)):
+                       continue
+
                     if self.exist_tuple(new_tuple,self.green_blobs):
-                        print("The new tuple exist in the green blobs")
-                        #So  we need to eliminate from green blobs the repeated tuple
-                        print(self.green_blobs)
-                    print("New Tuple")
-                    print(new_tuple)
+                        aux_remain_green_tuples = set()
+                        for blob in self.green_blobs:
+                            x_by_tuple = blob[0] 
+                            y_by_tuple = blob[1]
+                            if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                                 aux_remain_green_tuples.add(blob)
+                        self.green_blobs = aux_remain_green_tuples                 
                     aux_blobs.add(new_tuple)
-                self.red_blobs = aux_blobs           
-            else:
-                print("MOVES Green")     
-                for blob in self.green_blobs:
-                    print("Old Tuple")
-                    print(blob)   
-                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    #Aqui debe pregunta si la nueva tupla existen en red blobs entonces la eliminas de RED
-                    #ver si no se sale del rango 
+                self.red_blobs = aux_blobs 
+                print("ROJOS RESTANTES")
+                print(self.red_blobs)          
+                print("VERDES RESTANTES")
+                print(self.green_blobs)   
+            else:    
+                for blob in self.green_blobs:   
+                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))         
+                    if not (self.is_inside_border(new_tuple)):
+                        continue
                     if self.exist_tuple(new_tuple,self.red_blobs):
-                        print("The new tuple exist in the red blobs")
-                        #So  we need to eliminate from red blobs the repeated tuple
-                        print(self.red_blobs)
-                    print("New Tuple")
-                    print(new_tuple)   
-                    aux_blobs.add(new_tuple)
-                self.green_blobs = aux_blobs      
+                        aux_remain_tuples = set()
+                        for blob in self.red_blobs:
+                            x_by_tuple = blob[0] 
+                            y_by_tuple = blob[1]
+                            if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                                aux_remain_tuples.add(blob)
+                        self.red_blobs = aux_remain_tuples              
+                    aux_blobs.add(new_tuple)   
+                self.green_blobs = aux_blobs
+                print("ROJOS RESTANTES")
+                print(self.red_blobs)          
+                print("VERDES RESTANTES")
+                print(self.green_blobs)                         
         elif direction == 'L':
             print("Moves Left")
             tuple_to_add = (-1,0) 
@@ -127,6 +187,7 @@ class BlobsBoard(object):
                     if self.exist_tuple(new_tuple,self.green_blobs):
                         print("The new tuple exist in the green blobs")
                         #So  we need to eliminate from green blobs the repeated tuple
+
                         print(self.green_blobs)
                     print("New Tuple")
                     print(new_tuple)
@@ -243,6 +304,7 @@ class BlobsBoard(object):
         # move blobs of the specified color eliminating those that fall out of the board
         # eliminate corresponding blobs of the opponent
         # update borders
+        self.update_borders()
         #raise NotImplementedError
 
     # other methods???
@@ -291,9 +353,9 @@ class Blobs(Game):
             #deberia de retornar las acciones validas segun el color
         #MOVE RED
 
-        print("Action in BLOB")
-        print("State to move")
-        print(state.to_move)
+        #print("Action in BLOB")
+        #print("State to move")
+        #print(state.to_move)
         if state.to_move == "R":
             legal_movements.append('R')
             self.result(state,'R')
@@ -316,7 +378,7 @@ class Blobs(Game):
 
     def result(self, state, move):
         "returns the result of applying a move to a state" 
-        #"If right, evaluate blobs disappered to the rigth side"
+        #"If right, evaluate blobs disappered to the operation side"
         if move == 'R':
             print("MOVE R")
             self.initial.board.move(self.initial.to_move,"R")     
