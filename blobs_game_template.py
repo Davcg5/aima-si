@@ -129,183 +129,53 @@ class BlobsBoard(object):
  
     def move(self, color, direction):
         "moves all the blobs of a color in a direction"
-        aux_blobs=set()      
+        aux_blobs=set()  
+        tuple_to_add = (0,0)    
         if direction == 'R':
-            tuple_to_add = (1,0)
-            if color == 'R':   
-                for blob in self.red_blobs:  
-                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))              
-                    if not (self.is_inside_border(new_tuple)):
-                       continue
-
-                    if self.exist_tuple(new_tuple,self.green_blobs):
-                        aux_remain_green_tuples = set()
-                        for blob in self.green_blobs:
-                            x_by_tuple = blob[0] 
-                            y_by_tuple = blob[1]
-                            if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
-                                 aux_remain_green_tuples.add(blob)
-                        self.green_blobs = aux_remain_green_tuples                 
-                    aux_blobs.add(new_tuple)
-                self.red_blobs = aux_blobs 
-                print("ROJOS RESTANTES")
-                print(self.red_blobs)          
-                print("VERDES RESTANTES")
-                print(self.green_blobs)   
-            else:    
-                for blob in self.green_blobs:   
-                    new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))         
-                    if not (self.is_inside_border(new_tuple)):
-                        continue
-                    if self.exist_tuple(new_tuple,self.red_blobs):
-                        aux_remain_tuples = set()
-                        for blob in self.red_blobs:
-                            x_by_tuple = blob[0] 
-                            y_by_tuple = blob[1]
-                            if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
-                                aux_remain_tuples.add(blob)
-                        self.red_blobs = aux_remain_tuples              
-                    aux_blobs.add(new_tuple)   
-                self.green_blobs = aux_blobs
-                print("ROJOS RESTANTES")
-                print(self.red_blobs)          
-                print("VERDES RESTANTES")
-                print(self.green_blobs)                         
+            print("Moves Rigth")
+            tuple_to_add = (1,0)                       
         elif direction == 'L':
             print("Moves Left")
-            tuple_to_add = (-1,0) 
-            if color == 'R':   
-                print("moves Red")                
-                for blob in self.red_blobs:
-                    print("Old Tuple") 
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y,blob, tuple_to_add))             
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    if self.exist_tuple(new_tuple,self.green_blobs):
-                        print("The new tuple exist in the green blobs")
-                        #So  we need to eliminate from green blobs the repeated tuple
-
-                        print(self.green_blobs)
-                    print("New Tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.red_blobs = aux_blobs
-            else:
-                print("MOVES Green")
-                for blob in self.green_blobs:
-                    print("Old tuple")
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y, blob,tuple_to_add))
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-
-                    if self.exist_tuple(new_tuple,self.red_blobs):
-                        print("The new tuple exist in the red blobs")
-                        #So  we need to eliminate from red blobs the repeated tuple
-                        print(self.red_blobs)
-
-                    print("New Tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.green_blobs = aux_blobs    
+            tuple_to_add = (-1,0)          
         elif direction == 'U':
             print("Moves Up")
             tuple_to_add = (0,-1)
-            if color == 'R':   
-                print("moves Red")
-                for blob in self.red_blobs:
-                    print("Old tuple")
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))             
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    if self.exist_tuple(new_tuple,self.green_blobs):
-                        print("The new tuple exist in the green blobs")
-                        #So  we need to eliminate from green blobs the repeated tuple
-                        print(self.green_blobs)
-                    print("New tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.red_blobs = aux_blobs
-            else:
-                print("MOVES Green")
-                for blob in self.green_blobs:
-                    print("OLD TUPLE")
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x + y,blob,tuple_to_add))
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    if self.exist_tuple(new_tuple,self.red_blobs):
-                        print("The new tuple exist in the red blobs")
-                        #So  we need to eliminate from red blobs the repeated tuple
-                        print(self.red_blobs)
-                    print("New tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.green_blobs = aux_blobs
         else:
             tuple_to_add = (0,1)
             print("Moves Down")
-            if color == 'R':   
-                print("moves Red")
-                for blob in self.red_blobs:
-                    print("old tuple")
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    if self.exist_tuple(new_tuple,self.green_blobs):
-                        print("The new tuple exist in the green blobs")
-                        #So  we need to eliminate from green blobs the repeated tuple
-                        print(self.green_blobs)
-                    print("NEW tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.red_blobs = aux_blobs   
-            else:
-                print("MOVES Green")
-                for blob in self.green_blobs:
-                    print("Old Tuple")
-                    print(blob)
-                    new_tuple = tuple(map(lambda x,y: x+y,blob,tuple_to_add))
-                    if self.is_inside_border(new_tuple):
-                        print("Is a valid tuple")
-                    else:
-                        print("Is an invalid tuple")
-                    if self.exist_tuple(new_tuple,self.red_blobs):
-                        print("The new tuple exist in the red blobs")
-                        #So  we need to eliminate from red blobs the repeated tuple
-                        print(self.red_blobs)
-                    print("NEW tuple")
-                    print(new_tuple)
-                    aux_blobs.add(new_tuple)
-                self.green_blobs = aux_blobs
 
-        #
-        
-        #for blob in state.board.green_blobs:           
-        #    if new_tuple[0]<=6 and new_tuple[1]<=6:
-        #       
-        #state.board.green_blobs = aux_blobs
-        #print("MOVES")
-        #print(color)
-        #print(direction)
-        # move blobs of the specified color eliminating those that fall out of the board
-        # eliminate corresponding blobs of the opponent
-        # update borders
+        if color == 'R':   
+            for blob in self.red_blobs:  
+                new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))              
+                if not (self.is_inside_border(new_tuple)):
+                    continue
+
+                if self.exist_tuple(new_tuple,self.green_blobs):
+                    aux_remain_green_tuples = set()
+                    for blob in self.green_blobs:
+                        x_by_tuple = blob[0] 
+                        y_by_tuple = blob[1]
+                        if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                            aux_remain_green_tuples.add(blob)
+                    self.green_blobs = aux_remain_green_tuples                 
+                aux_blobs.add(new_tuple)
+            self.red_blobs = aux_blobs    
+        else:    
+            for blob in self.green_blobs:   
+                new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))         
+                if not (self.is_inside_border(new_tuple)):
+                    continue
+                if self.exist_tuple(new_tuple,self.red_blobs):
+                    aux_remain_tuples = set()
+                    for blob in self.red_blobs:
+                        x_by_tuple = blob[0] 
+                        y_by_tuple = blob[1]
+                        if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                            aux_remain_tuples.add(blob)
+                    self.red_blobs = aux_remain_tuples              
+                aux_blobs.add(new_tuple)   
+            self.green_blobs = aux_blobs                
         self.update_borders()
-        #raise NotImplementedError
 
     # other methods???
     #The function define if the tuple is in a border of the board
@@ -358,11 +228,11 @@ class Blobs(Game):
         #print(state.to_move)
         if state.to_move == "R":
             legal_movements.append('R')
-            self.result(state,'R')
+            self.result(state,'L')
         #MOVE GREEN  
         elif state.to_move == "G":
             legal_movements.append('R')
-            self.result(state,'R')
+            self.result(state,'U')
             #self.result(state,"L")
             #return  
         #elif state.to_move == "U":
