@@ -258,7 +258,6 @@ class Blobs(Game):
 
         return 0    
 
-
     def terminal_test(self, state):
         #Que es estooo
         "A state is terminal if it is won or there are no empty squares."

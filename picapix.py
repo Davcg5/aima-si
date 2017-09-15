@@ -190,7 +190,7 @@ def main2():
 
 	colors = ["Pink", "Green", "Yellow", "NC"]
     #~ #Subdomains
-    
+    #[p,g,y][c]
 	X1 = [[0,1,0],[0,0,0]]
 	X2 = [[0,2,1],[0,0,0]]
 	X3 = [[1,0,0],[0,0,0]]
@@ -201,6 +201,7 @@ def main2():
 	Y3 = [[1,1,0],[0,0,0]]
 	Y4 = [[0,3,1],[0,1,0]]
 	Y5 = [[0,3,0],[0,1,0]]
+	
 	colums = [X1[0],X2[0],X3[0],X4[0],X5[0]]
 	row = [Y1[0],Y2[0],Y3[0],Y4[0],Y5[0]]
 	predomains = [X1[0],X2[0],X3[0],X4[0],X5[0],Y1[0],Y2[0],Y3[0],Y4[0],Y5[0]]
@@ -350,7 +351,10 @@ def main1():
     
 	neighbors = parse_neighbors("""R1: R2 R3;
 		R4: R3; R3: R2""", variables)
+	#no repetir relaciones
 
+	#A B nodos R1 A R4
+	#a b valores 
 		
 	def picapix__constraint(A, a, B, b,invert = True):        
 		if A == 'R1' and B == 'R2' or A == 'R2' and B == 'R1':
@@ -365,12 +369,17 @@ def main1():
 		if A == 'R3' and B == 'R1' or A == 'R1' and B == 'R3':
 			return a != b
 		return False
+	
 	pica = Picapix(variables, domains, neighbors, picapix__constraint)
 	print("Resultado: ",backtracking_search(pica))
 
 
-
-
+	#Eje X y eje Y
+	#25 variables 
+	#Dominio Interseccion entre Colores arriba y colores lado derecho 
+	# 1,1 A verde Lado Rojo, Verde so color es verde , verde y rojo y verde y rojo son valores son verde y rojo
+	# si arriba es verde y abajo es rojo so valor = blanco
+	# si 2 verdes dos fichas seguidas verdes	
 if __name__ == "__main__":
 	main1() #Regiones jalando
 	#~ main2() #este esta cabron

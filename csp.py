@@ -64,6 +64,7 @@ class CSP(search.Problem):
         "Add {var: val} to assignment; Discard the old value if any."
         assignment[var] = val
         self.nassigns += 1
+        #print("ASSIGN CSP")
 
     def unassign(self, var, assignment):
         """Remove {var: val} from assignment.
@@ -71,6 +72,7 @@ class CSP(search.Problem):
         just call assign for that."""
         if var in assignment:
             del assignment[var]
+        #print("UNASSIGN CSP")
 
     def nconflicts(self, var, val, assignment):
         "Return the number of conflicts var=val has with other variables."
@@ -460,6 +462,9 @@ class NQueensCSP(CSP):
                 self.record_conflict(assignment, var, oldval, -1)
             self.record_conflict(assignment, var, val, +1)
             CSP.assign(self, var, val, assignment)
+
+    #Hacer una copia de la variable assignment
+    #Sobreescribir esto y volver a llamar unasignenment  assign
 
     def unassign(self, var, assignment):
         "Remove var from assignment (if it is there) and track conflicts."
