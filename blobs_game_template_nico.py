@@ -21,8 +21,7 @@ class BlobsBoard(object):
         self.red_blobs = None
         self.green_blobs = None
         self.new_random_board()
-        self.eaten_blobs = 0
-        self.blobs_deleted = 0
+        #print("init BlobsBoard")
 
     def new_random_board(self):
         "generate 12 random positions for each Blob color on the board"
@@ -30,11 +29,23 @@ class BlobsBoard(object):
         random.shuffle(positions)
         self.red_blobs = set(positions[0:12])
         self.green_blobs = set(positions[12:24])
-        #~ print("ROJAS INICIALES")
-        #~ print(self.red_blobs)
-        #~ print("VERDES INICIALES")
-        #~ print(self.green_blobs)
-              
+        print("ROJAS INICIALES")
+        print(self.red_blobs)
+        print("VERDES INICIALES")
+        print(self.green_blobs)
+    
+    #def display(self):
+    ##    print("displays the board")
+    ###    for row in range(1, 7):
+    ###        for col in range(1, 7):
+    ###            position = (row, col)
+    ###            if row <= self.top_border or row >= self.bottom_border or col <= self.left_border or col >= self.right_border:
+    ## #               print('o'," ")
+    ###            elif position in self.red_blobs: print('R',' ')
+    ###            elif position in self.green_blobs: print('G',' ')
+    ##            else: print('.',' ')
+    #        print()
+            
     def display(self):
         "displays the board"
         #print("Display")
@@ -55,6 +66,9 @@ class BlobsBoard(object):
                 elif position in self.green_blobs: print('G', end=' ')
                 else: print('.', end=' ')
             print()
+
+
+    #Deber ser recursivo el update hasta que ya haya eliminado todos los bordes vacios
 
     def update_borders(self):
         "update the positions of the board borders"
@@ -78,7 +92,17 @@ class BlobsBoard(object):
                 tuples_top_border+=1
             else:
                 if y_by_tuple == self.bottom_border-1:
-                    tuples_bottom_border+=1          
+                    tuples_bottom_border+=1
+
+        print("Total Tuplas")
+        print("TUPLAS EN BORDE IZQUIERDO")
+        print(tuples_left_border)
+        print("TUPLAS EN BORDE DERECHO")
+        print(tuples_right_border)
+        print("TUPLAS EN BORDE SUPERIOR")
+        print(tuples_top_border)
+        print("TUPLAS EN BORDE INFERIOR")
+        print(tuples_bottom_border)           
         
         if tuples_left_border == 0: 
             self.left_border += 1
@@ -91,54 +115,64 @@ class BlobsBoard(object):
 
         if tuples_bottom_border == 0:
             self.bottom_border -= 1
+        print("Nuevos Bordes")
+        print("LEFT")
+        print(self.left_border)
+        print("RIGTH")
+        print(self.right_border)
+        print("UP")
+        print(self.top_border)
+        print("DOWN") 
+        print(self.bottom_border)
          
     def move(self, color, direction):
         "moves all the blobs of a color in a direction"
         aux_blobs=set()  
         tuple_to_add = (0,0)    
         if direction == 'R':
+            print("Moves Rigth")
             tuple_to_add = (1,0)                       
         elif direction == 'L':
+            print("Moves Left")
             tuple_to_add = (-1,0)          
         elif direction == 'U':
+            print("Moves Up")
             tuple_to_add = (0,-1)
         else:
             tuple_to_add = (0,1)
-        
-        print("the direction ", direction)
-        self.deleted_blobs = 0
-        self.eaten_blobs = 0        
-        if color == 'G':
-            blobs_turn = self.green_blobs
-            blobs_opponent = self.red_blobs
-        else:
-            blobs_turn = self.red_blobs
-            blobs_opponent = self.green_blobs
-            
-        blobs_aux=set()
-		
-        for blob in blobs_turn:
-            new_tuple = tuple(map(lambda x, y: x + y, blob,tuple_to_add ))
-            if new_tuple[0]<self.right_border and \
-                       new_tuple[0]>self.left_border and \
-							   new_tuple[1]<self.bottom_border and \
-							         new_tuple[1]>self.top_border:
-                blobs_aux.add(new_tuple)
-            else:
-                self.blobs_deleted += 1
-                
-        for blob in blobs_aux:
-            if blob in blobs_opponent:
-                self.eaten_blobs += 1
-                blobs_opponent.discard(blob)
-         
-        if color == 'G':
-            self.green_blobs = blobs_aux
-            self.red_blobs = blobs_opponent 
-        else:
-            self.red_blobs = blobs_aux
-            self.green_blobs = blobs_opponent
-                           
+            print("Moves Down")
+
+        if color == 'R':   
+            for blob in self.red_blobs:  
+                new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))              
+                if not (self.is_inside_border(new_tuple)):
+                    continue
+
+                if self.exist_tuple(new_tuple,self.green_blobs):
+                    aux_remain_green_tuples = set()
+                    for blob in self.green_blobs:
+                        x_by_tuple = blob[0] 
+                        y_by_tuple = blob[1]
+                        if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                            aux_remain_green_tuples.add(blob)
+                    self.green_blobs = aux_remain_green_tuples                 
+                aux_blobs.add(new_tuple)
+            self.red_blobs = aux_blobs    
+        else:    
+            for blob in self.green_blobs:   
+                new_tuple=tuple(map(lambda x, y: x + y, blob, tuple_to_add))         
+                if not (self.is_inside_border(new_tuple)):
+                    continue
+                if self.exist_tuple(new_tuple,self.red_blobs):
+                    aux_remain_tuples = set()
+                    for blob in self.red_blobs:
+                        x_by_tuple = blob[0] 
+                        y_by_tuple = blob[1]
+                        if not (x_by_tuple == new_tuple[0] and y_by_tuple == new_tuple[1]):
+                            aux_remain_tuples.add(blob)
+                    self.red_blobs = aux_remain_tuples              
+                aux_blobs.add(new_tuple)   
+            self.green_blobs = aux_blobs                
         self.update_borders()
 
     #The function define if the tuple is in a border of the board
@@ -177,89 +211,90 @@ class Blobs(Game):
 
     def actions(self, state):
         "Legal moves are always all the four original directions."
-        return [move for move in ['L','R','U','D']]
+
+        legal_movements = []
+        #Segun yo el to move es el color que va a mover no la accion
+        for move in state.moves:
+            if move == "R":
+                #print("Right","Color: ", state.to_move)
+                state.board.move(state.to_move,'R')
+            elif move == "L":
+                #print("Left","Color: ", state.to_move)
+                state.board.move(state.to_move,'L')
+            elif move == "U":
+                #print("Up","Color: ", state.to_move)
+                state.board.move(state.to_move,'U')
+            else:
+                #print("Down","Color: ", state.to_move)
+                state.board.move(state.to_move,'D')
 
     def result(self, state, move):
         "returns the result of applying a move to a state" 
+        #"If right, evaluate blobs disappered to the operation side"
         if move == 'R':
-            state.board.move(state.to_move,move)     
+            #print("MOVE R")
+            self.initial.board.move(self.initial.to_move,"R")     
         elif move == 'L':
-            state.board.move(state.to_move,move)
+            #print("Move L")
+            self.initial.board.move(self.initial.to_move, "L")
         elif move == 'U':
-            state.board.move(state.to_move,move)
+            #print("Move U")
+            self.initial.board.move(self.initial.to_move,"U")
         else:
-            state.board.move(self.initial.to_move,"D")
+            #print("MOVE D")
+            self.initial.board.move(self.initial.to_move,"D")
+        #print(state.board.red_blobs)
         return state
 
     def utility(self, state, player):
         "Return the value to player; 1 for win, -1 for loss, 0 otherwise."
         "If player 1 has not left red blobs, return -1"
         "If player 2 has not green red blobs, return 1"
-        if player == "R":
-            if len(state.board.red_blobs) == 0:
-                return -1
-            else:
-                if len(state.board.green_blobs) == 0:
-                    return 1
+        if len(state.board.red_blobs) == 0:
+            return -1
 
-        else:
-            if len(state.board.green_blobs) == 0:
-                return -1
-            else:
-                if len(state.board.red_blobs) == 0:
-                    return 1
+        if len(state.board.green_blobs) == 0:
+            return 1
+
         return 0    
 
     def terminal_test(self, state):
-        if len(state.board.red_blobs) == 0 or len(state.board.green_blobs) == 0:
-            return True
+        #Que es estooo
         "A state is terminal if it is won or there are no empty squares."
-        #~ raise NotImplementedError
+        raise NotImplementedError
 
     def display(self, state):
         "Displays the current state"
         state.board.display()
-        return
-        
-    def to_move(self, state):
-        return state.to_move
-        
-    def heuristic(self,state):
-         raise NotImplementedError
-        
+        #~ raise NotImplementedError
 
 ## YOU ALSO NEED TO CREATE AN EVAL_FN AND A PLAYER FOR YOUR GAME THAT USE
 ## ALPHABETA_SEARCH INSTEAD OF ALPHABETA_FULL_SEARCH.
 ## YOU DO NOT NEED A CUTOFF_TEST BECAUSE I WILL USE DEPTHS FOR CUTTING THE
 ## LOOK-AHEAD SEARCH.
 def main():
-    blob = Blobs()
-    state = blob.initial
-    state.board.display()
+    blobs = Blobs()
+    blobs.display(blobs.initial)
     cont = 0
-    movement = 0
     while True:
+        print("Proximo Movimiento: ")
+        mov = input()
         if cont == 1:
             cont = 0
             turn = 'G'
-            print("Movimiento")
-            color = 'VERDE'
+            letra = 'VERDE'
         else:
             cont = 1
             turn = 'R'
-            color = 'ROJO'
-            print("-----------------" + str(movement) +"-----------------")
-            movement += 1
-            print("Movimiento")
-            mov = input()
-        if turn == 'G':
-            state_test = state
-            mov=alphabeta_search(state_test,blob)
-        state = GameState(to_move = turn, utility=blob.utility,
-                              board=state.board, moves = [mov])
-        blob.result(state,mov)
-        state.board.display()
-  
+            letra = 'ROJO'
+            
+        blobs.initial = GameState(to_move=turn, utility=0,
+                   board=blobs.initial.board, moves=[mov])
+        print("_______________"+letra+"_________________________")
+        blobs.actions(blobs.initial)
+        blobs.display(blobs.initial) 
+    
+
 if __name__ == "__main__":
     main()
 

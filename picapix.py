@@ -356,6 +356,7 @@ def main1():
 	#A B nodos R1 A R4
 	#a b valores 
 		
+	neighbors=  parse_neighbors("""V1: V2 V3 V4 V5 V6 V11 V16 V21; V2: V3 V4 V5 V7 V12 V17 V22; V3: V4 V5 V8 V13 V18 V23; V4: V5 V9 V14 V19 V24; V5: V10 V15 V20 V25; V6: V7 V8 V9 V10 V11 V16 V21; V7: V8 V9 V10 V12 V17 V22; V8: V9 V10 V13 V18 V23; V9: V10 V14 V19 V24; V10: V15 V20 V25; V11: V12 V13 V14 V15 V16 V21; V12: V13 V14 V15 V17 V22; V13: V14 V15 V19 V24; V14: V15 V19 V24; V15: V20 V25; V16: V17 V18 V19 V20 V21; V17: V18 V19 V20 V22; V18: V19 V20 V23; V19: V20 V24; V20: V25; V21: V22 V23 V24 V25; V22: V23 V24 V25; V23: V24 V25;V24: V25""",variables)	
 	def picapix__constraint(A, a, B, b,invert = True):        
 		if A == 'R1' and B == 'R2' or A == 'R2' and B == 'R1':
 			return a != b
@@ -376,7 +377,8 @@ def main1():
 
 	#Eje X y eje Y
 	#25 variables 
-	#Dominio Interseccion entre Colores arriba y colores lado derecho 
+	#Dominio Interseccion entre Color
+	es arriba y colores lado derecho 
 	# 1,1 A verde Lado Rojo, Verde so color es verde , verde y rojo y verde y rojo son valores son verde y rojo
 	# si arriba es verde y abajo es rojo so valor = blanco
 	# si 2 verdes dos fichas seguidas verdes	
