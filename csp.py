@@ -505,6 +505,7 @@ easy1 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..
 harder1 = '4173698.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'  # noqa
 
 _R3 = list(range(3))
+print(_R3)
 _CELL = itertools.count().__next__
 _BGRID = [[[[_CELL() for x in _R3] for y in _R3] for bx in _R3] for by in _R3]
 _BOXES = flatten([list(map(flatten, brow)) for brow in _BGRID])
@@ -604,8 +605,7 @@ def Zebra():
                 Norwegian: Blue; Winston: Snails; LuckyStrike: OJ;
                 Ukranian: Tea; Japanese: Parliaments; Kools: Horse;
                 Coffee: Green; Green: Ivory""", variables)
-    print(domains)
-    print(neighbors)
+
     for type in [Colors, Pets, Drinks, Countries, Smokes]:
         for A in type:
             for B in type:
@@ -614,8 +614,7 @@ def Zebra():
                         neighbors[A].append(B)
                     if A not in neighbors[B]:
                         neighbors[B].append(A)
-    print(neighbors)
-    time.sleep(10)
+
     def zebra_constraint(A, a, B, b, recurse=0):
         same = (a == b)
         next_to = abs(a - b) == 1
@@ -655,9 +654,10 @@ def Zebra():
     return CSP(variables, domains, neighbors, zebra_constraint)
 
 
-def solve_zebra(algorithm=min_conflicts, **args):
+def solve_zebra(algorithm= backtracking_search, **args):
     z = Zebra()
     ans = algorithm(z, **args)
+    print(ans)
     for h in range(1, 6):
         print('House', h, end=' ')
         for (var, val) in ans.items():
