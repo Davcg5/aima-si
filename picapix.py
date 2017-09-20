@@ -378,7 +378,7 @@ def main1():
 	#Eje X y eje Y
 	#25 variables 
 	#Dominio Interseccion entre Color
-	es arriba y colores lado derecho 
+	#es arriba y colores lado derecho
 	# 1,1 A verde Lado Rojo, Verde so color es verde , verde y rojo y verde y rojo son valores son verde y rojo
 	# si arriba es verde y abajo es rojo so valor = blanco
 	# si 2 verdes dos fichas seguidas verdes	
