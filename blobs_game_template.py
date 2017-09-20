@@ -110,26 +110,26 @@ class Blobs(Game):
     def result(self, state, move):
         "returns the result of applying a move to a state"
         
-        board_copy = copy.copy(state.board)
+        state_copy = copy.deepcopy(state)
         #~ print(board_copy.green_blobs)
         if move == 'R':
-            state.board.move(state.to_move,move)     
+            state_copy.board.move(state_copy.to_move,move)     
         elif move == 'L':
-            state.board.move(state.to_move,move)
+            state_copy.board.move(state_copy.to_move,move)
         elif move == 'U':
-            state.board.move(state.to_move,move)
+            state_copy.board.move(state_copy.to_move,move)
         else:
-            state.board.move(state.to_move,move)
+            state_copy.board.move(state_copy.to_move,move)
 
         #~ print("Turn: ", state.to_move)
-        print("Movement: ", move)
+        #~ print("Movement: ", move)
         #~ print("original: ",state.board.green_blobs)
         #~ print("copy2: ",board_copy.green_blobs)
-        state.board.display()
+        #~ state_copy.board.display()
         #~ board_copy.display()
         return GameState(to_move=('R' if state.to_move == 'G' else 'G'),
                          utility=self.utility(state, state.to_move),
-                         board=board_copy, moves=state.moves)
+                         board=state_copy.board, moves=state.moves)
 
     def utility(self, state, player):
         "Return the value to player; 1 for win, -1 for loss, 0 otherwise."
@@ -169,6 +169,7 @@ class Blobs(Game):
         
     def heuristic(self,state):
          h = state.board.blobs_eaten - state.board.blobs_deleted
+         #~ print(h)
          return h
         
 
@@ -186,7 +187,7 @@ def play_game(game, *players):
             game.display(state)
             print("Turn:\t\t",state.to_move)
             move = player(game, state)
-            #~ print("Move: \t\t",move)
+            print("Move: \t\t",move)
             state = game.result(state, move)
             if game.terminal_test(state):
                 game.display(state)
