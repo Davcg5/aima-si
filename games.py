@@ -3,6 +3,7 @@
 from collections import namedtuple
 import random
 
+
 from utils import argmax
 from canvas import Canvas
 
@@ -83,7 +84,7 @@ def alphabeta_full_search(state, game):
     return best_action
 
 
-def alphabeta_search(state, game, d=4, cutoff_test=None, eval_fn=None):
+def alphabeta_search(state, game, d=0, cutoff_test=None, eval_fn=None):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function."""
 
@@ -150,7 +151,8 @@ def random_player(game, state):
 
 
 def alphabeta_player(game, state):
-    return alphabeta_full_search(state, game)
+    #~ return alphabeta_full_search(state, game)
+    return alphabeta_search(state, game)
 
 
 def play_game(game, *players):

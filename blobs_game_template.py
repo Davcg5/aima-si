@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
+import copy
 
 from games import (GameState,Game, query_player, random_player, 
                     alphabeta_player,alphabeta_search, 
-                    alphabeta_full_search,play_game)
+                    alphabeta_full_search)
 
 #_______________________________________________________________________________
 # Auxiliary functions,
@@ -49,7 +50,7 @@ class BlobsBoard(object):
         "update the positions of the board borders"
 
         union_blob = self.red_blobs.union(self.green_blobs)
-        
+        #~ print(union_blob)
         self.left_border  = min([i for i,j in union_blob])-1
         self.top_border = min([j for i,j in union_blob])-1
         self.right_border = max([i for i,j in union_blob])+1
@@ -85,8 +86,6 @@ class BlobsBoard(object):
             self.red_blobs = do_move(self.red_blobs,self.green_blobs)
             self.green_blobs = self.green_blobs - self.red_blobs
 
-        print("Rojos: ", self.red_blobs)                  
-        print("Verdes: ", self.green_blobs)
         self.update_borders()
 
 
@@ -109,7 +108,10 @@ class Blobs(Game):
         return [move for move in ['L','R','U','D']]
 
     def result(self, state, move):
-        "returns the result of applying a move to a state" 
+        "returns the result of applying a move to a state"
+        
+        board_copy = copy.copy(state.board)
+        print(board_copy.green_blobs)
         if move == 'R':
             state.board.move(state.to_move,move)     
         elif move == 'L':
@@ -118,12 +120,22 @@ class Blobs(Game):
             state.board.move(state.to_move,move)
         else:
             state.board.move(state.to_move,move)
-        return state
+
+        #~ print("Turn: ", state.to_move)
+        print("Movement: ", move)
+        print("original: ",state.board.green_blobs)
+        print("copy2: ",board_copy.green_blobs)
+        state.board.display()
+        board_copy.display()
+        return GameState(to_move=('R' if state.to_move == 'G' else 'G'),
+                         utility=self.utility(state, state.to_move),
+                         board=board_copy, moves=state.moves)
 
     def utility(self, state, player):
         "Return the value to player; 1 for win, -1 for loss, 0 otherwise."
         "If player 1 has not left red blobs, return -1"
         "If player 2 has not green red blobs, return 1"
+        return self.heuristic(state)
         if player == "R":
             if len(state.board.red_blobs) == 0:
                 return -1
@@ -140,9 +152,12 @@ class Blobs(Game):
         return 0    
 
     def terminal_test(self, state):
-        if len(state.board.red_blobs) == 0 or len(state.board.green_blobs) == 0:
-            return True
         "A state is terminal if it is won or there are no empty squares."
+        if len(state.board.red_blobs) == 0 or len(state.board.green_blobs) == 0:
+            print("cero")
+            return True
+        return False
+
 
     def display(self, state):
         "Displays the current state"
@@ -153,37 +168,34 @@ class Blobs(Game):
         return state.to_move
         
     def heuristic(self,state):
-         raise NotImplementedError
+         h = state.board.blobs_eaten - state.board.blobs_deleted
+         return h
         
 
 ## YOU ALSO NEED TO CREATE AN EVAL_FN AND A PLAYER FOR YOUR GAME THAT USE
 ## ALPHABETA_SEARCH INSTEAD OF ALPHABETA_FULL_SEARCH.
 ## YOU DO NOT NEED A CUTOFF_TEST BECAUSE I WILL USE DEPTHS FOR CUTTING THE
 ## LOOK-AHEAD SEARCH.
+
+def play_game(game, *players):
+    """Play an n-person, move-alternating game."""
+
+    state = game.initial
+    while True:
+        for player in players:
+            game.display(state)
+            print("Turn:\t\t",state.to_move)
+            move = player(game, state)
+            #~ print("Move: \t\t",move)
+            state = game.result(state, move)
+            if game.terminal_test(state):
+                game.display(state)
+                return game.utility(state, game.to_move(game.initial))
+
+
 def main():
     blob = Blobs()
-    state = blob.initial
-    state.board.display()
-    cont = 0
-    movement = 0
-    while True:
-        if cont == 1:
-            cont = 0
-            turn = 'G'
-            print("Movimiento verde")
-            mov = input()
-        else:
-            cont = 1
-            turn = 'R'
-            print("Movimiento rojo")
-            mov = input()
-        state = GameState(to_move = turn, utility=blob.utility,
-                              board=state.board, moves = [mov])
-        blob.result(state,mov)
-        state.board.display()
-        if blob.terminal_test(state):
-            break
-    print("FIN")
+    play_game(blob,alphabeta_player,query_player)
   
 if __name__ == "__main__":
     main()
