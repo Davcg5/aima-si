@@ -111,7 +111,7 @@ class Blobs(Game):
         "returns the result of applying a move to a state"
         
         board_copy = copy.copy(state.board)
-        print(board_copy.green_blobs)
+        #~ print(board_copy.green_blobs)
         if move == 'R':
             state.board.move(state.to_move,move)     
         elif move == 'L':
@@ -123,10 +123,10 @@ class Blobs(Game):
 
         #~ print("Turn: ", state.to_move)
         print("Movement: ", move)
-        print("original: ",state.board.green_blobs)
-        print("copy2: ",board_copy.green_blobs)
+        #~ print("original: ",state.board.green_blobs)
+        #~ print("copy2: ",board_copy.green_blobs)
         state.board.display()
-        board_copy.display()
+        #~ board_copy.display()
         return GameState(to_move=('R' if state.to_move == 'G' else 'G'),
                          utility=self.utility(state, state.to_move),
                          board=board_copy, moves=state.moves)
