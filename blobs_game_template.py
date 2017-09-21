@@ -2,10 +2,91 @@
 # -*- coding: utf-8 -*-
 import random
 import copy
+infinity = float('inf')
 
 from games import (GameState,Game, query_player, random_player, 
-                    alphabeta_player,alphabeta_search, 
+                    alphabeta_player, 
                     alphabeta_full_search)
+
+
+# ______________________________________________________________________________
+# evaluation function of a team
+
+def eval_fn(state):
+    """returns a positive value is the given player (red or green) is supposed
+    to win the game or negative if the player is supposed to lose"""
+    e = len(state.board.red_blobs) - len(state.board.green_blobs)
+    #~ d = state.board.blobs_deleted
+    print("eaten: ",e)
+    #~ print("deleted: ",d)
+
+
+    eval_func = e
+    #~ if e == 0 and d == 0:
+        #~ eval_func = 0
+    #~ elif e == 0:
+        #~ eval_func = -1 * d
+    #~ elif d == 0:
+        #~ eval_func = e
+    #~ else:
+        #~ eval_func = (1.1*e - d)/pow(e * e + d * d, 0.5 )
+    return eval_func
+
+def alphabeta_search(game, state, d=1, cutoff_test=None, eval_fn=eval_fn):
+    """Search game to determine best action; use alpha-beta pruning.
+    This version cuts off search and uses an evaluation function."""
+    player = game.to_move(state)
+
+    # Functions used by alphabeta
+    def max_value(state, alpha, beta, depth):
+        if cutoff_test(state, depth):
+            return eval_fn(state)
+        v = -infinity
+        for a in game.actions(state):
+            #~ print("Segundo nivel",a)
+            v = max(v, min_value(game.result(state, a),
+                                 alpha, beta, depth + 1))
+            #~ print("third: ",v)
+            if v >= beta:
+                return v
+            alpha = max(alpha, v)
+        return v
+
+    def min_value(state, alpha, beta, depth):
+        #~ game.display(state)
+        if cutoff_test(state, depth):
+            return eval_fn(state)
+        v = infinity
+        for a in game.actions(state):
+            print("\tPrimer nivel",a)
+            v = min(v, max_value(game.result(state, a),
+                                 alpha, beta, depth + 1))
+            print("second: ",v)
+            if v <= alpha:
+                return v
+            beta = min(beta, v)
+        return v
+
+    # Body of alphabeta_search starts here:
+    # The default test cuts off at depth d or at a terminal state
+    cutoff_test = (cutoff_test or
+                   (lambda state, depth: depth > d or
+                    game.terminal_test(state)))
+    eval_fn = eval_fn or (lambda state: game.utility(state, player))
+    best_score = -infinity
+    beta = infinity
+    best_action = None
+    for a in game.actions(state):
+        print("\t\tMOVIMIENTO",a)
+        v = min_value(game.result(state, a), best_score, beta, 1)
+        print("Primerv: ",v)
+        if v > best_score:
+            best_score = v
+            best_action = a
+    return best_action
+
+
+
 
 #_______________________________________________________________________________
 # Auxiliary functions,
@@ -50,7 +131,7 @@ class BlobsBoard(object):
         "update the positions of the board borders"
 
         union_blob = self.red_blobs.union(self.green_blobs)
-        #~ print(union_blob)
+
         self.left_border  = min([i for i,j in union_blob])-1
         self.top_border = min([j for i,j in union_blob])-1
         self.right_border = max([i for i,j in union_blob])+1
@@ -73,19 +154,17 @@ class BlobsBoard(object):
             blobs_new = set([blob for blob in blobs_new if
                      (blob[0] > self.left_border and blob[0] < self.right_border and \
                       blob[1] < self.bottom_border and blob[1] > self.top_border)])
-            self.blobs_deleted = len(blobs_set) - len(blobs_new)
-            self.blobs_eaten = len(blobs_new & blobs_compare)
+
             return blobs_new
 
-        
         if color == 'G':
             self.green_blobs = do_move(self.green_blobs, self.red_blobs)
             self.red_blobs = self.red_blobs - self.green_blobs
 
         else:
-            self.red_blobs = do_move(self.red_blobs,self.green_blobs)
+            self.red_blobs = do_move(self.red_blobs,self.green_blobs)           
             self.green_blobs = self.green_blobs - self.red_blobs
-
+             
         self.update_borders()
 
 
@@ -111,7 +190,6 @@ class Blobs(Game):
         "returns the result of applying a move to a state"
         
         state_copy = copy.deepcopy(state)
-        #~ print(board_copy.green_blobs)
         if move == 'R':
             state_copy.board.move(state_copy.to_move,move)     
         elif move == 'L':
@@ -121,40 +199,33 @@ class Blobs(Game):
         else:
             state_copy.board.move(state_copy.to_move,move)
 
-        #~ print("Turn: ", state.to_move)
-        #~ print("Movement: ", move)
-        #~ print("original: ",state.board.green_blobs)
-        #~ print("copy2: ",board_copy.green_blobs)
-        #~ state_copy.board.display()
-        #~ board_copy.display()
         return GameState(to_move=('R' if state.to_move == 'G' else 'G'),
-                         utility=self.utility(state, state.to_move),
+                         utility=self.utility(state_copy, state_copy.to_move),
                          board=state_copy.board, moves=state.moves)
 
     def utility(self, state, player):
         "Return the value to player; 1 for win, -1 for loss, 0 otherwise."
         "If player 1 has not left red blobs, return -1"
         "If player 2 has not green red blobs, return 1"
-        return self.heuristic(state)
         if player == "R":
             if len(state.board.red_blobs) == 0:
                 return -1
-            else:
-                if len(state.board.green_blobs) == 0:
-                    return 1
+            if len(state.board.green_blobs) == 0:
+                return 1
+            return 0
 
         else:
             if len(state.board.green_blobs) == 0:
                 return -1
-            else:
-                if len(state.board.red_blobs) == 0:
-                    return 1
-        return 0    
+                
+            if len(state.board.red_blobs) == 0:
+                return 1
+            
+            return 0    
 
     def terminal_test(self, state):
         "A state is terminal if it is won or there are no empty squares."
         if len(state.board.red_blobs) == 0 or len(state.board.green_blobs) == 0:
-            print("cero")
             return True
         return False
 
@@ -166,17 +237,15 @@ class Blobs(Game):
         
     def to_move(self, state):
         return state.to_move
-        
-    def heuristic(self,state):
-         h = state.board.blobs_eaten - state.board.blobs_deleted
-         #~ print(h)
-         return h
+
         
 
 ## YOU ALSO NEED TO CREATE AN EVAL_FN AND A PLAYER FOR YOUR GAME THAT USE
 ## ALPHABETA_SEARCH INSTEAD OF ALPHABETA_FULL_SEARCH.
 ## YOU DO NOT NEED A CUTOFF_TEST BECAUSE I WILL USE DEPTHS FOR CUTTING THE
 ## LOOK-AHEAD SEARCH.
+
+
 
 def play_game(game, *players):
     """Play an n-person, move-alternating game."""
@@ -187,6 +256,7 @@ def play_game(game, *players):
             game.display(state)
             print("Turn:\t\t",state.to_move)
             move = player(game, state)
+            print("-------------------------------")
             print("Move: \t\t",move)
             state = game.result(state, move)
             if game.terminal_test(state):
@@ -196,7 +266,7 @@ def play_game(game, *players):
 
 def main():
     blob = Blobs()
-    play_game(blob,alphabeta_player,query_player)
+    play_game(blob,alphabeta_search,query_player)
   
 if __name__ == "__main__":
     main()
