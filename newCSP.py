@@ -20,6 +20,7 @@ class CSPPicaPix(CSP):
         #print(assignment)
       
 def main1():
+	print("Challenge 1")
 	variables=[]
 	values = ["R","W","Y","G"]
 	domains={}  
@@ -302,6 +303,8 @@ def main1():
 	print("Resultado: ",backtracking_search(pica))
 
 def main2():
+
+	print("Challenge 2")
 	variables = []
 	values = ["Orange","White","Black","Yellow"] 
 	domains = {}
@@ -581,5 +584,6 @@ def main2():
 	print("Resultado: ",backtracking_search(pica))	
 
 if __name__ == "__main__":
+	#main1()
 	main2()
      
