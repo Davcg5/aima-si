@@ -12,41 +12,47 @@ from games import (GameState,Game, query_player, random_player,
 # ______________________________________________________________________________
 # evaluation function of a team
 
-def eval_fn(state):
+def eval_fn7(state):
     """returns a positive value is the given player (red or green) is supposed
     to win the game or negative if the player is supposed to lose"""
-    e = len(state.board.red_blobs) - len(state.board.green_blobs)
-    #~ d = state.board.blobs_deleted
-    print("eaten: ",e)
-    #~ print("deleted: ",d)
+    r = len(state.board.red_blobs)
+    g = len(state.board.green_blobs)
+    #~ print("Rojo: ",r)
+    #~ print("Verde: ",g)
+    
+    #red movement
+    if r == g:
+        func =  r + g 
+    elif r >= 0 and r < 6:
+        func = r - g 
+    else:
+        func = r - g + r / (g +1)
 
-
-    eval_func = e
-    #~ if e == 0 and d == 0:
-        #~ eval_func = 0
-    #~ elif e == 0:
-        #~ eval_func = -1 * d
-    #~ elif d == 0:
-        #~ eval_func = e
+    #gree movement
+    #~ if r == g:
+        #~ func =  r + g 
+    #~ elif g >= 0 and g < 6:
+        #~ func = g - r 
     #~ else:
-        #~ eval_func = (1.1*e - d)/pow(e * e + d * d, 0.5 )
-    return eval_func
+        #~ func = g - r + g / (r +1)
 
-def alphabeta_search(game, state, d=1, cutoff_test=None, eval_fn=eval_fn):
+
+    return func
+
+def alphabeta_search(game, state, d=4, cutoff_test=None, eval_fn=eval_fn7):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function."""
     player = game.to_move(state)
 
     # Functions used by alphabeta
     def max_value(state, alpha, beta, depth):
+        #~ game.display(state)
         if cutoff_test(state, depth):
             return eval_fn(state)
         v = -infinity
         for a in game.actions(state):
-            #~ print("Segundo nivel",a)
             v = max(v, min_value(game.result(state, a),
                                  alpha, beta, depth + 1))
-            #~ print("third: ",v)
             if v >= beta:
                 return v
             alpha = max(alpha, v)
@@ -58,10 +64,10 @@ def alphabeta_search(game, state, d=1, cutoff_test=None, eval_fn=eval_fn):
             return eval_fn(state)
         v = infinity
         for a in game.actions(state):
-            print("\tPrimer nivel",a)
+            #~ print("\tPrimer nivel",a)
             v = min(v, max_value(game.result(state, a),
                                  alpha, beta, depth + 1))
-            print("second: ",v)
+            #~ print("value: ",v)
             if v <= alpha:
                 return v
             beta = min(beta, v)
@@ -254,19 +260,20 @@ def play_game(game, *players):
     while True:
         for player in players:
             game.display(state)
+            print("-------------------------------")
             print("Turn:\t\t",state.to_move)
             move = player(game, state)
-            print("-------------------------------")
             print("Move: \t\t",move)
             state = game.result(state, move)
             if game.terminal_test(state):
                 game.display(state)
                 return game.utility(state, game.to_move(game.initial))
 
-
+#Define the order of players
 def main():
     blob = Blobs()
     play_game(blob,alphabeta_search,query_player)
+    #~ play_game(blob,query_player,alphabeta_search)
   
 if __name__ == "__main__":
     main()
