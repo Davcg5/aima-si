@@ -155,7 +155,6 @@ class Blobs(Game):
     def terminal_test(self, state):
         "A state is terminal if it is won or there are no empty squares."
         if len(state.board.red_blobs) == 0 or len(state.board.green_blobs) == 0:
-            print("cero")
             return True
         return False
 
