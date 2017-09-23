@@ -84,7 +84,7 @@ def alphabeta_full_search(state, game):
     return best_action
 
 
-def alphabeta_search(state, game, d=0, cutoff_test=None, eval_fn=None):
+def alphabeta_search(state, game, d=2, cutoff_test=None, eval_fn=None):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function."""
 
@@ -96,8 +96,10 @@ def alphabeta_search(state, game, d=0, cutoff_test=None, eval_fn=None):
             return eval_fn(state)
         v = -infinity
         for a in game.actions(state):
+            print("Segundo nivel",a)
             v = max(v, min_value(game.result(state, a),
                                  alpha, beta, depth + 1))
+            print("third: ",v)
             if v >= beta:
                 return v
             alpha = max(alpha, v)
@@ -108,8 +110,10 @@ def alphabeta_search(state, game, d=0, cutoff_test=None, eval_fn=None):
             return eval_fn(state)
         v = infinity
         for a in game.actions(state):
+            print("\tPrimer nivel",a)
             v = min(v, max_value(game.result(state, a),
                                  alpha, beta, depth + 1))
+            print("second: ",v)
             if v <= alpha:
                 return v
             beta = min(beta, v)
@@ -125,8 +129,8 @@ def alphabeta_search(state, game, d=0, cutoff_test=None, eval_fn=None):
     beta = infinity
     best_action = None
     for a in game.actions(state):
+        print("\t\tMOVIMIENTO",a)
         v = min_value(game.result(state, a), best_score, beta, 1)
-        print(v)
         if v > best_score:
             best_score = v
             best_action = a
