@@ -131,7 +131,6 @@ def alphabeta_search(state, game, d=2, cutoff_test=None, eval_fn=None):
     for a in game.actions(state):
         print("\t\tMOVIMIENTO",a)
         v = min_value(game.result(state, a), best_score, beta, 1)
-        print("Primerv: ",v)
         if v > best_score:
             best_score = v
             best_action = a

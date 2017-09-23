@@ -196,6 +196,7 @@ class Blobs(Game):
         "returns the result of applying a move to a state"
         
         state_copy = copy.deepcopy(state)
+        
         if move == 'R':
             state_copy.board.move(state_copy.to_move,move)     
         elif move == 'L':
