@@ -589,10 +589,8 @@ def genetic_search(problem, fitness_fn, ngen=1000, pmut=0.1, n=20):
     s = problem.initial_state
     states = []
     for a in problem.actions:
-        print(a)
         stadoresult = problem.result(s,a)
         replica = copy.deepcopy(stadoresult)
-        print(stadoresult.genes)
         states.append(replica)
     random.shuffle(states)
     return genetic_algorithm(states[:n], problem.value, ngen, pmut)
@@ -616,9 +614,9 @@ def genetic_algorithm(population, fitness_fn, ngen=1000, pmut=0.1):
                 child.mutate()
             new_population.append(child)
         population = new_population
-        print("Nuevo Generacion")
-        for m in range(len(population)):
-            print(population[m].genes)
+        print("new population")
+        for i in range(len(population)):
+            print(population[i].genes)
     return argmax(population, key=fitness_fn)
 
 
