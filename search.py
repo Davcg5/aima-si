@@ -9,6 +9,7 @@ from utils import (
     weighted_sample_with_replacement, memoize, print_table, DataFile, Stack,
     FIFOQueue, PriorityQueue, name
 )
+import copy
 #from grid import distance
 def distance(a, b):
     """The distance between two (x, y) points."""
@@ -586,7 +587,13 @@ def genetic_search(problem, fitness_fn, ngen=1000, pmut=0.1, n=20):
     This requires the problem to have states that can mate and mutate,
     plus a value method that scores states."""
     s = problem.initial_state
-    states = [problem.result(s, a) for a in problem.actions(s)]
+    states = []
+    for a in problem.actions:
+        print(a)
+        stadoresult = problem.result(s,a)
+        replica = copy.deepcopy(stadoresult)
+        print(stadoresult.genes)
+        states.append(replica)
     random.shuffle(states)
     return genetic_algorithm(states[:n], problem.value, ngen, pmut)
 
@@ -594,19 +601,28 @@ def genetic_search(problem, fitness_fn, ngen=1000, pmut=0.1, n=20):
 def genetic_algorithm(population, fitness_fn, ngen=1000, pmut=0.1):
     "[Figure 4.8]"
     for i in range(ngen):
+        print(i)
         new_population = []
-        for i in len(population):
+        for j in range(len(population)):
             fitnesses = map(fitness_fn, population)
             p1, p2 = weighted_sample_with_replacement(population, fitnesses, 2)
+            print("P1")
+            print(p1.genes)
+            print("P2")
+            print(p2.genes)
+            print("...")
             child = p1.mate(p2)
             if random.uniform(0, 1) < pmut:
                 child.mutate()
             new_population.append(child)
         population = new_population
+        print("Nuevo Generacion")
+        for m in range(len(population)):
+            print(population[m].genes)
     return argmax(population, key=fitness_fn)
 
 
-class GAState:
+class GAState(object):
 
     "Abstract class for individuals in a genetic search."
 
@@ -620,7 +636,11 @@ class GAState:
 
     def mutate(self):
         "Change a few of my genes."
-        raise NotImplementedError
+        c = random.sample(range(0, 4), 1)[0]
+        newnumber = random.sample(range(0, 15), 1)[0]
+        self.genes[c] = newnumber
+        return self.genes
+        #raise NotImplementedError
 
 # _____________________________________________________________________________
 # The remainder of this file implements examples for the search algorithms.

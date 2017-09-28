@@ -7,18 +7,28 @@ from math import ceil
 #Basate en el NQueen para poder implicar la logica del codigo (archivo CSP.py)
 class CSPPicaPix(CSP):
 
+    
     def __init__(self, variables, domains, neighbors, constraints):
         "Construct a CSP problem. If variables is empty, it becomes domains.keys()."     
+        self.myassignment = []
         CSP.__init__(self,variables, domains, neighbors, constraints)
 
     def assign(self, var, val, assignment):
         CSP.assign(self, var, val, assignment)
-        #print(assignment)
+        self.myassignment = assignment
 
     def unassign(self, var, assignment):
         CSP.unassign(self, var, assignment)
-        #print(assignment)
-      
+        self.myassignment = assignment
+     
+    def display(self, assignment,variables):
+    	contador = 0 
+    	for i in variables:
+    		print(self.myassignment[i] + ",", end="")
+    		contador += 1
+    		if contador % 5 == 0:
+    			print()
+
 def main1():
 	print("Challenge 1")
 	variables=[]
@@ -38,7 +48,6 @@ def main1():
 		else:
 			domains[i] = values
 
-	print(variables)
 	neighbors=  parse_neighbors("""V1: V2 V3 V4 V5 V6 V11 V16 V21;
 		V2: V3 V4 V5 V7 V12 V17 V22;
 		V3: V4 V5 V8 V13 V18 V23;
@@ -301,18 +310,19 @@ def main1():
 
 	pica = CSPPicaPix(variables, domains, neighbors, picapix_constraint)
 	print("Resultado: ",backtracking_search(pica))
+	print("Like a board")
+	pica.display(pica.myassignment,variables)
 
 def main2():
 
 	print("Challenge 2")
 	variables = []
-	values = ["Orange","White","Black","Yellow"] 
+	values = ["O","W","B","Y"]  #Orange WHite Black and Yellow
 	domains = {}
 
 	for x in range(25):
 		variable = 'V'+str(x+1)
 		variables.append(variable)
-	print(variables)
 	neighbors=  parse_neighbors("""V1: V2 V3 V4 V5 V6 V11 V16 V21;
 		V2: V3 V4 V5 V7 V12 V17 V22;
 		V3: V4 V5 V8 V13 V18 V23;
@@ -340,15 +350,15 @@ def main2():
 	   	
 	for i in variables:
 		if i == 'V1' or i == 'V16' or i == 'V21' or i == 'V23' or i == 'V5' or i == 'V25':
-			domains[i] = {"Yellow","White"} 
+			domains[i] = {"Y","W"} 
 		elif i == 'V2' or i == 'V4' or i == 'V8' or i == 'V10' or i == 'V12' or i == 'V13' or i == 'V14' or i == 'V15' or i == 'V17' or i == 'V19':
-			domains[i] = {"Orange","White"}
+			domains[i] = {"O","W"}
 		elif i  == 'V3' or i == 'V5' or i == 'V18' or i == 'V20':
-			domains[i] = {"Yellow","Orange","White"}
+			domains[i] = {"Y","O","W"}
 		elif i == 'V7' or i == 'V9':
-			domains[i] = {"Black","Orange","White"}
+			domains[i] = {"B","O","W"}
 		else:
-			domains[i] = {"White"}
+			domains[i] = {"W"}
 
 	def constrains(A,a,B,b, invert=True):
 		if A == 'V1' and B == 'V2' or A  =='V2' and B == 'V1':
@@ -580,8 +590,11 @@ def main2():
 		if A  == 'V24' and B == 'V25' or A == 'V25' and B == 'V24':
 			return a != b
 		return False   
+	
 	pica = CSPPicaPix(variables, domains, neighbors, constrains)
 	print("Resultado: ",backtracking_search(pica))	
+	print("Like a board")
+	pica.display(pica.myassignment,variables)
 
 if __name__ == "__main__":
 	#main1()
