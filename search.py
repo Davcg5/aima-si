@@ -599,25 +599,16 @@ def genetic_search(problem, fitness_fn, ngen=1000, pmut=0.1, n=20):
 def genetic_algorithm(population, fitness_fn, ngen=1000, pmut=0.1):
     "[Figure 4.8]"
     for i in range(ngen):
-        print(i)
         new_population = []
         for j in range(len(population)):
             fitnesses = map(fitness_fn, population)
             p1, p2 = weighted_sample_with_replacement(population, fitnesses, 2)
-            print("P1")
-            print(p1.genes)
-            print("P2")
-            print(p2.genes)
-            print("...")
             child = p1.mate(p2)
             if random.uniform(0, 1) < pmut:
                 child.mutate()
             new_population.append(child)
         population = new_population
-        print("new population")
-        for i in range(len(population)):
-            print(population[i].genes)
-    return argmax(population, key=fitness_fn)
+    return argmin(population, key=fitness_fn)
 
 
 class GAState(object):

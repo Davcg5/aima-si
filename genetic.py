@@ -15,21 +15,14 @@ class StateGenetic(GAState):
 	def mate(self, other):
 		"Return a new individual crossing self and other."
 		c = random.randrange(len(self.genes))
-		print("random number")
-		print(c)
 		toret = self.__class__(self.genes[:c] + other.genes[c:])
-		print("Nuevo hijo")
-		print(toret.genes)
 		return toret
 
 	def mutate(self):
 		"Change a few of my genes."
-		print("Antes de la mutacion")
-		print(self.genes)
 		for i in range(3):	
 			s = list(self.genes)
 			c = random.sample(range(0, 16), 1)[0]
-			print(c)
 			newnumber = self.genes[c]
 			if newnumber == '0':
 				newnumber = '1'
@@ -37,9 +30,6 @@ class StateGenetic(GAState):
 				newnumber = '0'
 			s[c] = newnumber
 			self.genes = "".join(s)
-
-		print("New Mutation")
-		print(self.genes)
 		return self.__class__(self.genes)
 
 class GeneticNoLinear(Problem):
@@ -47,7 +37,7 @@ class GeneticNoLinear(Problem):
 	def __init__(self,initial=StateGenetic('0000000000000000'), meta = StateGenetic('0000000000000000')):
 		Problem.__init__(self, initial.genes, meta)
 		self.initial_state = initial
-		self.actions = ['A0','A1','A2','A3','A4','A5'] # acciones posibles
+		self.actions = ['A0','A1','A2','A3'] # acciones posibles
 		self.data = [(2,26),(4,-1),(6,4),(8,20),(10,0),(12,2),(14,19),(16,1),(18,-4),(20,19)]
 		self.error = []
 		
@@ -66,12 +56,12 @@ class GeneticNoLinear(Problem):
 		elif accion == 'A3':
 			so = StateGenetic('0000000000000001')
 			return so
-		elif accion == 'A4':
-			so = StateGenetic('1000100010001000')
-			return so
-		elif accion == 'A5':
-			so = StateGenetic('0100001000100000')
-			return so
+		#elif accion == 'A4':
+		#	so = StateGenetic('1000100010001000')
+		#	return so
+		#elif accion == 'A5':
+		#	so = StateGenetic('0100001000100000')
+		#	return so
 
 	def value(self, state):
 		err = 0
@@ -108,6 +98,6 @@ def convertir(genes):
 	print(a3)
 
 nolinear = GeneticNoLinear(StateGenetic('0000000000000000'))
-state = genetic_search(nolinear, nolinear.value,2000)
+state = genetic_search(nolinear, nolinear.value,50)
 print("agg")
 convertir(state.genes)
