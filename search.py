@@ -608,6 +608,9 @@ def genetic_algorithm(population, fitness_fn, ngen=1000, pmut=0.1):
                 child.mutate()
             new_population.append(child)
         population = new_population
+    #print(population)
+    #for i in range(len(population)):
+        #print(population[i].genes)
     return argmin(population, key=fitness_fn)
 
 

@@ -1,22 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from search import genetic_search,Problem,GAState
-#from numpy import (exp,sin,arange)
 from math import exp,sin
 import random
 import copy
-#import matplotlib.pyplot as plt
+
+def genetic_algorithm(population, fitness_fn, ngen=1000, pmut=0.1):
+    "[Figure 4.8]"
+    for i in range(ngen):
+        new_population = []
+        for j in range(len(population)):
+            fitnesses = map(fitness_fn, population)
+            p1, p2 = weighted_sample_with_replacement(population, fitnesses, 2)
+            child = p1.mate(p2)
+            if random.uniform(0, 1) < pmut:
+                child.mutate()
+            new_population.append(child)
+        population = new_population
+    #print(population)
+    #for i in range(len(population)):
+    #    print(population[i].genes)
+    return argmin(population, key=fitness_fn)
 
 class StateGenetic(GAState):
 
 	def __init__(self, genes):
-		self.genes = genes
+		self.genes = genes[:]
 
 	def mate(self, other):
 		"Return a new individual crossing self and other."
 		c = random.randrange(len(self.genes))
-		toret = self.__class__(self.genes[:c] + other.genes[c:])
-		return toret
+		cross = self.__class__(self.genes[:c] + other.genes[c:])
+		return cross
 
 	def mutate(self):
 		"Change a few of my genes."
@@ -45,23 +60,36 @@ class GeneticNoLinear(Problem):
 	def result(self, estado, accion):
 		new_state = estado.genes
 		if accion == 'A0':
-			sg = StateGenetic('0001000000000000')
-			return sg
+			#sg = StateGenetic('0001000000000100')
+			sg = self.generate_individual()
+			return StateGenetic(sg)
 		elif accion == 'A1':
-			sh = StateGenetic('0000000100000000')
-			return sh
+			#sh = StateGenetic('0000000100000100')
+			sh = self.generate_individual()
+			return StateGenetic(sh)
 		elif accion == 'A2':
-			sy = StateGenetic('0000000000010000')
-			return sy
+			#sy = StateGenetic('0000000100010000')
+			sy = self.generate_individual()
+			return StateGenetic(sy)
 		elif accion == 'A3':
-			so = StateGenetic('0000000000000001')
-			return so
-		#elif accion == 'A4':
-		#	so = StateGenetic('1000100010001000')
-		#	return so
-		#elif accion == 'A5':
-		#	so = StateGenetic('0100001000100000')
-		#	return so
+			#s = StateGenetic('0100000000000001')
+			s = self.generate_individual() 
+			return StateGenetic(s)
+		elif accion == 'A4':
+			#so = StateGenetic('1000100010001000')
+			so = self.generate_individual()
+			return StateGenetic(so)
+		elif accion == 'A5':
+			#so = StateGenetic('0100001000100000')
+			so = self.generate_individual()
+			return StateGenetic(so)
+
+	def generate_individual(self):
+		s  = ""
+		for i in range(16):
+			rannumber = random.sample(range(0, 2), 1)[0]
+			s = s + str(rannumber)	
+		return s
 
 	def value(self, state):
 		err = 0
@@ -98,6 +126,6 @@ def convertir(genes):
 	print(a3)
 
 nolinear = GeneticNoLinear(StateGenetic('0000000000000000'))
-state = genetic_search(nolinear, nolinear.value,50)
-print("agg")
+state = genetic_search(nolinear, nolinear.value,1500,0.8)
+print("Resultado:")
 convertir(state.genes)
